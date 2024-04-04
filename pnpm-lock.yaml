@@ -13,7 +13,7 @@ dependencies:
     version: 0.6.7(@stitches/core@1.2.8)(solid-js@1.4.8)(solid-transition-group@0.0.12)
   '@monaco-editor/loader':
     specifier: ^1.4.0
-    version: 1.4.0(monaco-editor@0.46.0)
+    version: 1.4.0(monaco-editor@0.47.0)
   '@motionone/solid':
     specifier: ^10.14.1
     version: 10.14.1(solid-js@1.4.8)
@@ -162,7 +162,7 @@ devDependencies:
     version: 3.0.8(terser@5.14.2)
   vite-plugin-dynamic-base:
     specifier: ^0.4.4
-    version: 0.4.4
+    version: 0.4.9
   vite-plugin-solid:
     specifier: ^2.3.0
     version: 2.3.0(solid-js@1.4.8)(vite@3.0.8)
@@ -594,12 +594,12 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@monaco-editor/loader@1.4.0(monaco-editor@0.46.0):
+  /@monaco-editor/loader@1.4.0(monaco-editor@0.47.0):
     resolution: {integrity: sha512-00ioBig0x642hytVspPl7DbQyaSWRaolYie/UFNjoTdvoKPzo6xrXLhTk9ixgIKcLH5b5vDOjVNiGyY+uDCUlg==}
     peerDependencies:
       monaco-editor: '>= 0.21.0 < 1'
     dependencies:
-      monaco-editor: 0.46.0
+      monaco-editor: 0.47.0
       state-local: 1.0.7
     dev: false
 
@@ -2554,8 +2554,8 @@ packages:
       minimist: 1.2.6
     dev: true
 
-  /monaco-editor@0.46.0:
-    resolution: {integrity: sha512-ADwtLIIww+9FKybWscd7OCfm9odsFYHImBRI1v9AviGce55QY8raT+9ihH8jX/E/e6QVSGM+pKj4jSUSRmALNQ==}
+  /monaco-editor@0.47.0:
+    resolution: {integrity: sha512-VabVvHvQ9QmMwXu4du008ZDuyLnHs9j7ThVFsiJoXSOQk18+LF89N4ADzPbFenm0W4V2bGHnFBztIRQTgBfxzw==}
     dev: false
 
   /mri@1.2.0:
@@ -2596,8 +2596,8 @@ packages:
       whatwg-url: 5.0.0
     dev: true
 
-  /node-html-parser@5.4.1:
-    resolution: {integrity: sha512-xy/O2wOEBJsIRLs4avwa1lVY7tIpXXOoHHUJLa0GvnoPPqMG1hgBVl1tNI3GHOwRktTVZy+Y6rjghk4B9/NLyg==}
+  /node-html-parser@5.4.2:
+    resolution: {integrity: sha512-RaBPP3+51hPne/OolXxcz89iYvQvKOydaqoePpOgXcrOKZhjVIzmpKZz+Hd/RBO2/zN2q6CNJhQzucVz+u3Jyw==}
     dependencies:
       css-select: 4.3.0
       he: 1.2.0
@@ -3331,10 +3331,10 @@ packages:
       vfile-message: 3.1.2
     dev: false
 
-  /vite-plugin-dynamic-base@0.4.4:
-    resolution: {integrity: sha512-++d35lUSWhIRcoKfTUlWSe3BFMTJPB0iQzAhNCNwiFILfouXAosGhB0DNjtxiIuHSORSrxwawzlwByAGbDuJgA==}
+  /vite-plugin-dynamic-base@0.4.9:
+    resolution: {integrity: sha512-q/iLMDdKd0P4xB8BEYS7H7YiVxdPpr9rAxK//TLqYd3Y8NoI9sCdMH3sg5e7DKMDrhksbrCF25qosjZlpcGPkg==}
     dependencies:
-      node-html-parser: 5.4.1
+      node-html-parser: 5.4.2
     dev: true
 
   /vite-plugin-solid@2.3.0(solid-js@1.4.8)(vite@3.0.8):
