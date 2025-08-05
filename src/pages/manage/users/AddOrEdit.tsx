@@ -25,7 +25,7 @@ import {
 } from "@hope-ui/solid"
 import { MaybeLoading, FolderChooseInput } from "~/components"
 import { useFetch, useRouter, useT } from "~/hooks"
-import { handleResp, notify, r } from "~/utils"
+import { getRoleDetail, handleResp, notify, r } from "~/utils"
 import { PEmptyResp, PResp, User } from "~/types"
 import { createStore } from "solid-js/store"
 import { For, Show, createSignal } from "solid-js"
@@ -38,6 +38,7 @@ const AddOrEdit = () => {
   const { params, back } = useRouter()
   const { id } = params
   const [roles, setRoles] = createSignal<{ id: number; name: string }[]>([])
+  const [paths, setPaths] = createSignal<string[]>([])
 
   const [user, setUser] = createStore<User>({
     id: 0,
@@ -65,11 +66,31 @@ const AddOrEdit = () => {
       setRoles(data.content)
     })
 
-    // 如果是编辑模式，加载用户信息
     if (id) {
       const resp = await loadUser()
-      handleResp(resp, setUser)
+      handleResp(resp, (data) => {
+        setUser(data)
+        loadPathsFromRoles(data.role)
+      })
+    } else {
+      setUser("base_path", "/")
     }
+  }
+
+  const loadPathsFromRoles = async (roleIds: number[]) => {
+    const pathSet = new Set<string>()
+    pathSet.add("/")
+    for (const roleId of roleIds) {
+      const resp = await getRoleDetail(roleId)
+      handleResp(resp, (data) => {
+        for (const scope of data.permission_scopes || []) {
+          if (scope.path) {
+            pathSet.add(scope.path)
+          }
+        }
+      })
+    }
+    setPaths([...pathSet].map((p) => p.toString()))
   }
 
   initData()
@@ -118,17 +139,31 @@ const AddOrEdit = () => {
             </FormControl>
           </Show>
 
-          {/* <FormControl w="$full" display="flex" flexDirection="column" required>
+          <FormControl w="$full" display="flex" flexDirection="column" required>
             <FormLabel for="base_path" display="flex" alignItems="center">
               {t(`users.base_path`)}
             </FormLabel>
-            <FolderChooseInput
-              id="base_path"
+            <Select
               value={user.base_path}
-              onChange={(path) => setUser("base_path", path)}
-              onlyFolder
-            />
-          </FormControl> */}
+              onChange={(value) => setUser("base_path", value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectListbox>
+                  <For each={paths()}>
+                    {(p) => (
+                      <SelectOption value={p}>
+                        <SelectOptionText>{p}</SelectOptionText>
+                        <SelectOptionIndicator />
+                      </SelectOption>
+                    )}
+                  </For>
+                </SelectListbox>
+              </SelectContent>
+            </Select>
+          </FormControl>
 
           <FormControl w="$full" display="flex" flexDirection="column" required>
             <FormLabel display="flex" alignItems="center">
@@ -232,11 +267,11 @@ const AddOrEdit = () => {
           <Button
             loading={okLoading()}
             onClick={async () => {
-              // 校验密码不能为空
-              if (!user.password.trim()) {
-                notify.error(t("users.password") + " " + t("global.required"))
-                return
-              }
+              // // 校验密码不能为空
+              // if (!user.password.trim()) {
+              //   notify.error(t("users.password") + " " + t("global.required"))
+              //   return
+              // }
 
               // 校验角色不能为空
               if (!user.role || user.role.length === 0) {
