@@ -274,7 +274,7 @@ export const updateIndex = async (paths = [], max_depth = -1): PEmptyResp => {
 }
 
 export const getLabelList = (): PResp<any> => {
-  return r.get("/admin/label/list")
+  return r.get("/label/list")
 }
 
 export const createLabel = (
@@ -295,13 +295,11 @@ export const updateLabel = (
 }
 
 export const getLabelDetail = (id: number): PResp<any> => {
-  return r.get(`/admin/label/get?id=${id}`)
+  return r.get(`/label/get?id=${id}`)
 }
 
 export const getFilesByLabel = (label_id: number): PResp<any> => {
-  return r.get(
-    `/admin/label_file_binding/get_file_by_label?label_id=${label_id}`,
-  )
+  return r.get(`/label_file_binding/get_file_by_label?label_id=${label_id}`)
 }
 
 export const createLabelFileBinding = (
@@ -325,7 +323,7 @@ export const createLabelFileBinding = (
 }
 
 export const getLabelFileBinding = (file_name?: string): PResp<any> => {
-  return r.post("/admin/label_file_binding/get", { file_name })
+  return r.post("/label_file_binding/get", { file_name })
 }
 
 export const getRoleList = (): PResp<any> => {
