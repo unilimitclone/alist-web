@@ -30,6 +30,9 @@ interface Data {
   users: User[]
   storages: Storage[]
   metas: Meta[]
+  labels: any[]
+  label_file_bindings: any[]
+  roles: any[]
 }
 type LogType = "success" | "error" | "info"
 const LogMap = {
@@ -71,6 +74,34 @@ const BackupRestore = () => {
     setLog((prev) => [...prev, { type, msg }])
     logRef.scrollTop = logRef.scrollHeight
   }
+  const [getLabelsLoading, getLabels] = useFetch(() => r.get("/label/list"))
+  const [addLabelLoading, addLabel] = useFetch((label: any) =>
+    r.post("/admin/label/create", label),
+  )
+  const [updateLabelLoading, updateLabel] = useFetch((label: any) =>
+    r.post("/admin/label/update", label),
+  )
+  const [getLabelBindingsLoading, getLabelBindings] = useFetch(() =>
+    r.get("/admin/label_file_binding/list"),
+  )
+  // const [addLabelBindingLoading, addLabelBinding] = useFetch((data: any) =>
+  //   r.post("/admin/label_file_binding/create", data)
+  // )
+  const [restoreLabelBindingsLoading, restoreLabelBindings] = useFetch(
+    (payload: {
+      keep_ids: boolean
+      override: boolean
+      bindings: any[]
+    }): PEmptyResp => r.post("/admin/label_file_binding/restore", payload),
+  )
+
+  const [getRolesLoading, getRoles] = useFetch(() => r.get("/admin/role/list"))
+  const [addRoleLoading, addRole] = useFetch((data: any) =>
+    r.post("/admin/role/create", data),
+  )
+  const [updateRoleLoading, updateRole] = useFetch((data: any) =>
+    r.post("/admin/role/update", data),
+  )
   const [getSettingsLoading, getSettings] = useFetch(
     (): PResp<any> => r.get("/admin/setting/list"),
   )
@@ -88,7 +119,10 @@ const BackupRestore = () => {
       getSettingsLoading() ||
       getUsersLoading() ||
       getMetasLoading() ||
-      getStoragesLoading()
+      getStoragesLoading() ||
+      getLabelsLoading() ||
+      getLabelBindingsLoading() ||
+      getRolesLoading()
     )
   }
   function encrypt(data: any, key: string): string {
@@ -119,6 +153,9 @@ const BackupRestore = () => {
       users: [],
       storages: [],
       metas: [],
+      labels: [],
+      label_file_bindings: [],
+      roles: [],
     }
     if (password() != "") allData.encrypted = encrypt("encrypted", password())
     for (const item of [
@@ -126,6 +163,9 @@ const BackupRestore = () => {
       { name: "users", fn: getUsers, page: true },
       { name: "storages", fn: getStorages, page: true },
       { name: "metas", fn: getMetas, page: true },
+      { name: "labels", fn: getLabels, page: true },
+      { name: "label_file_bindings", fn: getLabelBindings, page: true },
+      { name: "roles", fn: getRoles, page: true },
     ] as const) {
       const resp = await item.fn()
       handleRespWithoutNotify(
@@ -249,9 +289,15 @@ const BackupRestore = () => {
       addUserLoading() ||
       addStorageLoading() ||
       addMetaLoading() ||
+      addLabelLoading() ||
+      // addLabelBindingLoading() ||
+      addRoleLoading() ||
       updateUserLoading() ||
       updateStorageLoading() ||
-      updateMetaLoading()
+      updateMetaLoading() ||
+      updateLabelLoading() ||
+      updateRoleLoading() ||
+      restoreLabelBindingsLoading()
     )
   }
   const restore = async () => {
@@ -277,14 +323,21 @@ const BackupRestore = () => {
             appendLog(t("br.wrong_encrypt_password"), "error")
             return
           }
-        const dataasarray = Object.values(data)
-        for (let i = dataasarray.length - 4; i < dataasarray.length; i++) {
-          const obj = dataasarray[i]
-          console.log(obj)
-          for (let a = 0; a < obj.length; a++) {
-            const obj1 = obj[a]
-            for (const key in obj1) {
-              obj1[key] = decrypt(obj1[key], password(), false, encrypted)
+        const encryptedArrays = [
+          "settings",
+          "users",
+          "storages",
+          "metas",
+          "labels",
+          "label_file_bindings",
+          "roles",
+        ] as const
+        for (const key of encryptedArrays) {
+          const arr = (data as any)[key] || []
+          for (let a = 0; a < arr.length; a++) {
+            const obj1 = arr[a]
+            for (const k in obj1) {
+              obj1[k] = decrypt(obj1[k], password(), false, encrypted)
             }
           }
         }
@@ -318,6 +371,15 @@ const BackupRestore = () => {
             },
           )
         if (override()) {
+          const lfbRows = (data.label_file_bindings || []).map((b: any) => ({
+            ...b,
+            id: typeof b.id === "string" ? Number(b.id) : b.id,
+            user_id:
+              typeof b.user_id === "string" ? Number(b.user_id) : b.user_id,
+            label_id:
+              typeof b.label_id === "string" ? Number(b.label_id) : b.label_id,
+            file_name: String(b.file_name ?? ""),
+          }))
           await handleOvrData(
             data.users,
             getUsers,
@@ -342,9 +404,107 @@ const BackupRestore = () => {
             "path",
             "manage.sidemenu.metas",
           )
+          await handleOvrData(
+            data.labels,
+            getLabels,
+            addLabel,
+            updateLabel,
+            "id",
+            "manage.sidemenu.labels",
+          )
+          if (lfbRows.length) {
+            await handleRespWithoutNotify(
+              await restoreLabelBindings({
+                keep_ids: true,
+                override: true,
+                bindings: lfbRows,
+              }),
+              () => {
+                appendLog(
+                  t("br.success_restore_item", {
+                    item: t("manage.sidemenu.label_file_bindings"),
+                  }),
+                  "success",
+                )
+              },
+              (msg) => {
+                appendLog(
+                  t("br.failed_restore_item", {
+                    item: t("manage.sidemenu.label_file_bindings"),
+                  }) +
+                    ":" +
+                    msg,
+                  "error",
+                )
+              },
+            )
+          }
+          const builtinRoleSet = new Set(["admin"])
+          const rolesToProcess = (data.roles || []).filter((r: any) => {
+            const rn = String(r?.name ?? "").toLowerCase()
+            if (builtinRoleSet.has(rn)) {
+              appendLog(
+                t("br.success_restore_item", {
+                  item: t("manage.sidemenu.roles"),
+                }) + ` - [${r.name}] skipped (builtin role)`,
+                "info",
+              )
+              return false
+            }
+            return true
+          })
+
+          await handleOvrData(
+            rolesToProcess,
+            getRoles,
+            addRole,
+            updateRole,
+            "name",
+            "manage.sidemenu.roles",
+          )
         } else {
+          const usersToCreate = (data.users || []).filter((u: any) => {
+            const uname = String(u?.username ?? "").toLowerCase()
+            if (uname === "admin" || uname === "guest") {
+              appendLog(
+                t("br.success_restore_item", {
+                  item: t("manage.sidemenu.users"),
+                }) + ` - [${u.username}] skipped (builtin user)`,
+                "info",
+              )
+              return false
+            }
+            return true
+          })
+
+          for (const u of usersToCreate) {
+            u.id = 0
+            await handleRespWithoutNotify(
+              await addUser(u),
+              () => {
+                appendLog(
+                  t("br.success_restore_item", {
+                    item: t("manage.sidemenu.users"),
+                  }) +
+                    "-" +
+                    `[${u.username}]`,
+                  "success",
+                )
+              },
+              (msg) => {
+                appendLog(
+                  t("br.failed_restore_item", {
+                    item: t("manage.sidemenu.users"),
+                  }) +
+                    ` [ ${u.username} ] :` +
+                    msg,
+                  "error",
+                )
+              },
+            )
+          }
+
           for (const item of [
-            { name: "users", fn: addUser, data: data.users, key: "username" },
             {
               name: "storages",
               fn: addStorage,
@@ -352,10 +512,11 @@ const BackupRestore = () => {
               key: "mount_path",
             },
             { name: "metas", fn: addMeta, data: data.metas, key: "path" },
+            { name: "labels", fn: addLabel, data: data.labels, key: "name" },
           ] as const) {
             for (const itemData of item.data || []) {
               itemData.id = 0
-              handleRespWithoutNotify(
+              await handleRespWithoutNotify(
                 await item.fn(itemData),
                 () => {
                   appendLog(
@@ -372,14 +533,86 @@ const BackupRestore = () => {
                     t("br.failed_restore_item", {
                       item: t(`manage.sidemenu.${item.name}`),
                     }) +
-                      ` [ ${(itemData as any)[item.key]} ] ` +
-                      ":" +
+                      ` [ ${(itemData as any)[item.key]} ] :` +
                       msg,
                     "error",
                   )
                 },
               )
             }
+          }
+          for (const role of data.roles || []) {
+            const roleName = String(role?.name ?? "").toLowerCase()
+            if (["admin", "guest", "general"].includes(roleName)) {
+              appendLog(
+                t("br.success_restore_item", {
+                  item: t("manage.sidemenu.roles"),
+                }) + ` - [${role.name}] skipped (builtin role)`,
+                "info",
+              )
+              continue
+            }
+            if ("id" in role) delete role.id
+            await handleRespWithoutNotify(
+              await addRole(role),
+              () => {
+                appendLog(
+                  t("br.success_restore_item", {
+                    item: t("manage.sidemenu.roles"),
+                  }) +
+                    "-" +
+                    `[${role.name}]`,
+                  "success",
+                )
+              },
+              (msg) => {
+                appendLog(
+                  t("br.failed_restore_item", {
+                    item: t("manage.sidemenu.roles"),
+                  }) +
+                    "-" +
+                    `[${role.name}]:` +
+                    msg,
+                  "error",
+                )
+              },
+            )
+          }
+          const lfbRows = (data.label_file_bindings || []).map((b: any) => ({
+            ...b,
+            id: typeof b.id === "string" ? Number(b.id) : b.id,
+            user_id:
+              typeof b.user_id === "string" ? Number(b.user_id) : b.user_id,
+            label_id:
+              typeof b.label_id === "string" ? Number(b.label_id) : b.label_id,
+            file_name: String(b.file_name ?? ""),
+          }))
+          if (lfbRows.length) {
+            await handleRespWithoutNotify(
+              await restoreLabelBindings({
+                keep_ids: true,
+                override: false,
+                bindings: lfbRows,
+              }),
+              () => {
+                appendLog(
+                  t("br.success_restore_item", {
+                    item: t("manage.sidemenu.label_file_bindings"),
+                  }),
+                  "success",
+                )
+              },
+              (msg) => {
+                appendLog(
+                  t("br.failed_restore_item", {
+                    item: t("manage.sidemenu.label_file_bindings"),
+                  }) +
+                    ":" +
+                    msg,
+                  "error",
+                )
+              },
+            )
           }
         }
         appendLog(t("br.finish_restore"), "info")
@@ -411,7 +644,7 @@ const BackupRestore = () => {
       </HStack>
       <FormControl w="$full" display="flex" flexDirection="column">
         <Flex w="$full" direction="column" gap="$1">
-          <FormLabel>{t(`br.override`)}</FormLabel>
+          <FormLabel for="restore-override">{t(`br.override`)}</FormLabel>
           <HopeSwitch
             id="restore-override"
             checked={override()}
@@ -420,7 +653,7 @@ const BackupRestore = () => {
             }
           ></HopeSwitch>
 
-          <FormLabel>{t(`br.encrypt_password`)}</FormLabel>
+          <FormLabel for="password">{t(`br.encrypt_password`)}</FormLabel>
           <Input
             id="password"
             type="password"
