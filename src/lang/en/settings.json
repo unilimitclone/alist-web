@@ -1,7 +1,7 @@
 {
   "allow_indexed": "Allow indexed",
   "allow_mounted": "Allow mounted",
-  "use_newui": "Use new ui",
+  "allow_register": "Allow register",
   "announcement": "Announcement",
   "aria2_secret": "Aria2 secret",
   "aria2_uri": "Aria2 uri",
@@ -15,6 +15,7 @@
   "decompress_download_task_threads_num": "Decompress download task threads num",
   "decompress_upload_task_threads_num": "Decompress upload task threads num",
   "default_page_size": "Default page size",
+  "default_role": "Default role",
   "external_previews": "External previews",
   "favicon": "Favicon",
   "filename_char_mapping": "Filename char mapping",

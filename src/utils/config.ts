@@ -10,8 +10,6 @@ export const setBasePath = (path: string) => {
     base_path = base_path.slice(0, -1)
   }
 }
-console.log("base_path", base_path)
-console.log("window.ALIST.base_path", window.ALIST.base_path)
 if (window.ALIST.base_path) {
   setBasePath(window.ALIST.base_path)
 }
@@ -29,4 +27,4 @@ if (api.endsWith("/")) {
 
 export const monaco_cdn =
   window.ALIST.monaco_cdn ||
-  "https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/monaco-editor/0.33.0-dev.20220228/min/vs"
+  "https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/min/vs"

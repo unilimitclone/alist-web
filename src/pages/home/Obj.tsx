@@ -50,7 +50,6 @@ export const Obj = () => {
       lastPathname = pathname
       lastPage = page
       useObjTitle()
-      console.log("pathname", pathname)
 
       await handlePathChange(pathname, page)
     }),

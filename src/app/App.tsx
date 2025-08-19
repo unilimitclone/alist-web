@@ -21,6 +21,7 @@ import { useI18n } from "@solid-primitives/i18n"
 import { initialLang, langMap, loadedLangs } from "./i18n"
 import { Resp } from "~/types"
 import { setArchiveExtensions } from "~/store/archive"
+import "~/utils/custom-icons"
 
 const Home = lazy(() => import("~/pages/home/Layout"))
 const Manage = lazy(() => import("~/pages/manage"))

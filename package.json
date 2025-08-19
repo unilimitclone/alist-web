@@ -18,7 +18,7 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://alist.nn.ci",
+  "homepage": "https://alistgo.com",
   "scripts": {
     "crowdin:upload": "crowdin upload sources --auto-update",
     "crowdin:download": "crowdin download --verbose",

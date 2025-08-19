@@ -14,7 +14,6 @@ import { encodePath, hoverColor, joinBase } from "~/utils"
 export const Nav = () => {
   const { pathname } = useRouter()
   const paths = createMemo(() => ["", ...pathname().split("/").filter(Boolean)])
-  console.log("pathname", pathname())
   const t = useT()
   const { setPathAs } = usePath()
 

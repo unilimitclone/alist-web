@@ -62,15 +62,12 @@ export const ListTitle = (props: {
       <Text w={cols[1].w} {...itemProps(cols[1])}>
         {t(`home.obj.${cols[1].name}`)}
       </Text>
-      <Text w={cols[2].w} {...itemProps(cols[2])}>
-        {t(`home.obj.${cols[2].name}`)}
-      </Text>
       <Text
-        w={cols[3].w}
-        {...itemProps(cols[3])}
+        w={cols[2].w}
+        {...itemProps(cols[2])}
         display={{ "@initial": "none", "@md": "inline" }}
       >
-        {t(`home.obj.${cols[3].name}`)}
+        {t(`home.obj.${cols[2].name}`)}
       </Text>
     </HStack>
   )
@@ -78,6 +75,12 @@ export const ListTitle = (props: {
 
 const ListLayout = () => {
   const onDragOver = (e: DragEvent) => {
+    // 拖拽上传做权限检查限制
+    const writeIndex = UserPermissions.findIndex((item) => item === "write")
+    if (!UserMethods.can(me(), writeIndex, getCurrentPath())) {
+      return
+    }
+
     const items = Array.from(e.dataTransfer?.items ?? [])
     for (let i = 0; i < items.length; i++) {
       const item = items[i]

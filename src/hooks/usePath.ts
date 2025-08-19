@@ -108,14 +108,7 @@ export const usePath = () => {
         index: arg?.index,
         size: arg?.size,
       }
-      console.log("getObjs", arg?.path)
       const processedPath = getProcessedPath(arg?.path || "/")
-      console.log(
-        "fsList processedPath:",
-        arg?.path || "/",
-        "->",
-        processedPath,
-      )
 
       return fsList(
         processedPath,
@@ -152,8 +145,6 @@ export const usePath = () => {
     rp?: boolean,
     force?: boolean,
   ) => {
-    // cancelObj?.()
-    cancelList?.()
     retry_pass = rp ?? false
     ObjStore.setErr("")
 

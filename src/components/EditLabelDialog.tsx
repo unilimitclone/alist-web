@@ -31,7 +31,10 @@ import { createSignal, For, Show, createEffect } from "solid-js"
 import { useT, useRouter, usePath } from "~/hooks"
 import { IoCheckmark } from "solid-icons/io"
 import { BsPlus } from "solid-icons/bs"
-import { createLabelFileBinding } from "~/utils/api"
+import {
+  createLabelFileBinding,
+  createLabelFileBindingBatch,
+} from "~/utils/api"
 import { handleResp, notify } from "~/utils"
 import { StoreObj, Obj } from "~/types"
 
@@ -48,7 +51,9 @@ export interface EditLabelDialogProps {
   onClose: () => void
   onSubmit: (selectedLabels: string[]) => void
   labels: Label[]
-  obj: StoreObj & Obj
+  obj: StoreObj
+  isBatch?: boolean
+  selectedObjs?: StoreObj[]
 }
 
 const EditLabelDialog = (props: EditLabelDialogProps) => {
@@ -78,12 +83,23 @@ const EditLabelDialog = (props: EditLabelDialogProps) => {
     try {
       setLoading(true)
       const labelIdsString = selectedLabelIds().join(",")
-      const resp = await createLabelFileBinding(labelIdsString, props.obj)
+
+      // 调用批量打标签接口
+      const objectsToProcess =
+        props.isBatch && props.selectedObjs ? props.selectedObjs : [props.obj]
+      const resp = await createLabelFileBindingBatch(
+        labelIdsString,
+        objectsToProcess,
+      )
+
       handleResp(resp, () => {
         notify.success(t("home.tag.bind_success"))
         props.onSubmit(selectedLabelIds())
         props.onClose()
-        refresh()
+        // 延迟刷新，等待对话框关闭完成
+        setTimeout(() => {
+          refresh(false, false)
+        }, 300)
       })
     } catch (err: any) {
       notify.error(err.message || t("home.tag.bind_failed"))

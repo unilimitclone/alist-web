@@ -1,11 +1,10 @@
-import { HStack, Icon, Text, Badge, IconButton, Tooltip } from "@hope-ui/solid"
+import { HStack, Icon, Text, Badge, Tooltip } from "@hope-ui/solid"
 import { Motion } from "@motionone/solid"
 import { useContextMenu } from "solid-contextmenu"
 import {
   batch,
   Show,
   For,
-  createResource,
   createSignal,
   onMount,
   onCleanup,
@@ -25,15 +24,10 @@ import { ObjType, StoreObj, Obj } from "~/types"
 import { bus, formatDate, getFileSize, hoverColor } from "~/utils"
 import { getIconByObj } from "~/utils/icon"
 import { ItemCheckbox, useSelectWithMouse } from "./helper"
-import { BsPlus } from "solid-icons/bs"
 import { UserMethods } from "~/types"
 import { me } from "~/store"
-import { useLabels } from "~/store/label"
-import AddLabelDialog from "~/components/AddLabelDialog"
-import EditLabelDialog from "~/components/EditLabelDialog"
 import { getColorWithOpacity } from "~/utils/color"
 import { pathJoin } from "~/utils/path"
-import { createLabelFileBinding } from "~/utils/api"
 
 interface Label {
   id: number
@@ -50,10 +44,9 @@ export interface Col {
 }
 
 export const cols: Col[] = [
-  { name: "name", textAlign: "left", w: { "@initial": "30%", "@md": "30%" } },
-  { name: "tag", textAlign: "right", w: { "@initial": "46%", "@md": "25%" } },
-  { name: "size", textAlign: "right", w: { "@initial": "24%", "@md": "15%" } },
-  { name: "modified", textAlign: "right", w: { "@initial": 0, "@md": "30%" } },
+  { name: "name", textAlign: "left", w: { "@initial": "60%", "@md": "45%" } },
+  { name: "size", textAlign: "right", w: { "@initial": "40%", "@md": "30%" } },
+  { name: "modified", textAlign: "right", w: { "@initial": 0, "@md": "25%" } },
 ]
 
 // 添加选中统计组件
@@ -116,54 +109,6 @@ export const ListItem = (props: { obj: StoreObj & Obj; index: number }) => {
     // 否则使用当前路径
 
     return pathJoin(pathname(), props.obj.name)
-  }
-
-  // 使用全局标签列表
-  const { labels, refetch } = useLabels()
-  const [isAddLabelOpen, setIsAddLabelOpen] = createSignal(false)
-  const [isEditLabelOpen, setIsEditLabelOpen] = createSignal(false)
-
-  onMount(() => {
-    const refreshHandler = () => {
-      refetch()
-    }
-    bus.on("refresh_labels", refreshHandler)
-    onCleanup(() => {
-      bus.off("refresh_labels", refreshHandler)
-    })
-  })
-
-  const handleAddLabel = async (
-    name: string,
-    description: string,
-    bg_color: string,
-  ) => {
-    try {
-      // 获取最新的标签列表
-      const labelData = await refetch()
-      if (labelData?.data?.content) {
-        // 找到刚刚创建的标签
-        const newLabel = labelData.data.content.find(
-          (label: Label) =>
-            label.name === name &&
-            label.description === description &&
-            label.bg_color === bg_color,
-        )
-        if (newLabel) {
-          // 创建标签文件绑定
-          await createLabelFileBinding(newLabel.id.toString(), props.obj)
-          // 强制刷新当前目录
-          await refresh(false, true)
-        }
-      }
-    } catch (err) {
-      console.error("Failed to bind label to file:", err)
-    }
-  }
-
-  const handleEditLabel = (selectedLabels: string[]) => {
-    // 触发父组件刷新
-    bus.emit("refresh")
   }
 
   return (
@@ -256,91 +201,90 @@ export const ListItem = (props: { obj: StoreObj & Obj; index: number }) => {
             <Text
               class="name"
               css={{
-                wordBreak: "break-all",
-                whiteSpace:
-                  filenameStyle() === "multi_line" ? "unset" : "nowrap",
-                "overflow-x":
-                  filenameStyle() === "scrollable" ? "auto" : "hidden",
-                textOverflow:
-                  filenameStyle() === "ellipsis" ? "ellipsis" : "unset",
-                "scrollbar-width": "none",
-                "&::-webkit-scrollbar": {
-                  display: "none",
-                },
+                position: "relative",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                flex: 1,
+                minWidth: 0,
+                cursor: "pointer",
               }}
               title={props.obj.name}
             >
-              {props.obj.name}
+              <div
+                ref={(el) => {
+                  if (el) {
+                    onMount(() => {
+                      const checkWidth = () => {
+                        const parent = el.parentElement
+                        if (parent && el.scrollWidth > parent.clientWidth) {
+                          el.classList.add("should-marquee")
+                        } else {
+                          el.classList.remove("should-marquee")
+                        }
+                      }
+                      checkWidth()
+                      // 监听窗口大小变化，重新检查是否需要滚动
+                      window.addEventListener("resize", checkWidth)
+                      onCleanup(() => {
+                        window.removeEventListener("resize", checkWidth)
+                      })
+                    })
+                  }
+                }}
+                style={{
+                  display: "inline-block",
+                  "white-space": "nowrap",
+                  "padding-right": "50px",
+                }}
+              >
+                {props.obj.name}
+              </div>
+              <style>
+                {`
+                .should-marquee:hover {
+                  animation: marquee 8s linear infinite;
+                }
+                @keyframes marquee {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(calc(-100% + ${cols[0].w["@initial"]})); }
+                }
+                `}
+              </style>
             </Text>
           </HStack>
           <HStack
-            spacing="$1"
-            w={cols[1].w}
-            textAlign={cols[1].textAlign as any}
-            onClick={(e: MouseEvent) => {
-              e.preventDefault()
-              e.stopPropagation()
-            }}
-            justifyContent="space-between"
+            spacing="$0_5"
+            justifyContent="flex-start"
+            overflow="hidden"
+            w="8%"
           >
-            <HStack spacing="$1" flex={1} overflow="hidden">
-              <Show when={props.obj.label_list?.length}>
-                <For each={props.obj.label_list || []}>
-                  {(label: Label) => (
-                    <Tooltip label={label.name} placement="top">
-                      <Badge
-                        colorScheme="primary"
-                        bgColor={getColorWithOpacity(label.bg_color)}
-                        color={label.bg_color}
-                        variant="solid"
-                        mr="$1"
-                        textTransform="none"
-                        maxW="100px"
-                        overflow="hidden"
-                        css={{
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {label.name}
-                      </Badge>
-                    </Tooltip>
-                  )}
-                </For>
-              </Show>
-            </HStack>
-            <Show when={UserMethods.is_admin(me()) && !props.obj.is_dir}>
-              <IconButton
-                size="xs"
-                variant="ghost"
-                color={getMainColor()}
-                icon={<BsPlus size={20} />}
-                aria-label="添加标签"
-                onClick={(e: MouseEvent) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  const labelData = labels()
-                  if (labelData?.data?.content?.length) {
-                    setIsEditLabelOpen(true)
-                  } else {
-                    setIsAddLabelOpen(true)
-                  }
-                }}
-                flexShrink={0}
-              />
+            <Show when={props.obj.label_list?.length}>
+              <For each={props.obj.label_list || []}>
+                {(label: Label) => (
+                  <Tooltip label={label.name} placement="top">
+                    <Badge
+                      colorScheme="primary"
+                      bgColor={getColorWithOpacity(label.bg_color)}
+                      color={label.bg_color}
+                      variant="solid"
+                      mr="$0_5"
+                      textTransform="none"
+                      maxW="80px"
+                      overflow="hidden"
+                      css={{
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        fontSize: "0.75rem",
+                        paddingInline: "0.5rem",
+                        paddingBlock: "0.25rem",
+                      }}
+                    >
+                      {label.name}
+                    </Badge>
+                  </Tooltip>
+                )}
+              </For>
             </Show>
-            <AddLabelDialog
-              isOpen={isAddLabelOpen()}
-              onClose={() => setIsAddLabelOpen(false)}
-              onSubmit={handleAddLabel}
-            />
-            <EditLabelDialog
-              isOpen={isEditLabelOpen()}
-              onClose={() => setIsEditLabelOpen(false)}
-              onSubmit={handleEditLabel}
-              labels={labels()?.data?.content || []}
-              obj={props.obj}
-            />
           </HStack>
           <Text class="size" w={cols[2].w} textAlign={cols[2].textAlign as any}>
             {getFileSize(props.obj.size)}
@@ -348,8 +292,8 @@ export const ListItem = (props: { obj: StoreObj & Obj; index: number }) => {
           <Text
             class="modified"
             display={{ "@initial": "none", "@md": "inline" }}
-            w={cols[3].w}
-            textAlign={cols[3].textAlign as any}
+            w={cols[2].w}
+            textAlign={cols[2].textAlign as any}
           >
             {formatDate(props.obj.modified)}
           </Text>

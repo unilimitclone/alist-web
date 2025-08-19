@@ -321,6 +321,30 @@ export const createLabelFileBinding = (
     hashinfo: obj.hashinfo,
   })
 }
+// 批量打标签
+export const createLabelFileBindingBatch = (
+  label_ids: string,
+  items: StoreObj[],
+): PEmptyResp => {
+  const requestData = {
+    label_ids,
+    items: items.map((obj) => ({
+      path: (obj as any).path || "",
+      name: obj.name,
+      isDir: obj.is_dir,
+      labelIdList: [parseInt(label_ids)],
+      size: obj.size,
+      type: obj.type,
+      modified: obj.modified,
+      created: (obj as any).created || obj.modified,
+      sign: obj.sign || "",
+      thumb: obj.thumb || "",
+      hashInfoStr: (obj as any).hashinfo || "",
+    })),
+  }
+
+  return r.post("/admin/label_file_binding/create_batch", requestData)
+}
 
 export const getLabelFileBinding = (file_name?: string): PResp<any> => {
   return r.post("/label_file_binding/get", { file_name })

@@ -65,6 +65,11 @@
     "share_code": "Share code",
     "share_code-tips": "share code of 115 share link"
   },
+  "123 Open": {
+    "client_id": "Client id",
+    "client_secret": "Client secret",
+    "root_folder_id": "Root folder id"
+  },
   "123Pan": {
     "password": "Password",
     "root_folder_id": "Root folder id",
@@ -1127,6 +1132,7 @@
     "115 Cloud": {},
     "115 Open": {},
     "115 Share": {},
+    "123 Open": {},
     "123Pan": {},
     "123PanLink": {},
     "123PanShare": {},
@@ -1213,6 +1219,7 @@
     "115 Cloud": "115 Cloud",
     "115 Open": "115 Open",
     "115 Share": "115 Share",
+    "123 Open": "123 Open",
     "123Pan": "123Pan",
     "123PanLink": "123PanLink",
     "123PanShare": "123PanShare",

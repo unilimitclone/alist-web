@@ -24,6 +24,7 @@ import { Component, lazy } from "solid-js"
 import { Group, UserRole } from "~/types"
 import { FaSolidBook, FaSolidDatabase } from "solid-icons/fa"
 import { TbArchive } from "solid-icons/tb"
+import { FaSolidUserGear } from "solid-icons/fa"
 
 export type SideMenuItem = SideMenuItemProps & {
   component?: Component
@@ -169,48 +170,46 @@ export const side_menu_items: SideMenuItem[] = [
       },
     ],
   },
+  // {
+  //   title: "manage.sidemenu.permissions",
+  //   icon: (props: { active?: boolean; style?: any }) => (
+  //     <img
+  //       src={
+  //         props.active
+  //           ? "/images/permissions-active.png"
+  //           : "/images/permissions-gray.png"
+  //       }
+  //       alt="search"
+  //       style={{ width: "1.2em", height: "1.2em", ...(props.style || {}) }}
+  //     />
+  //   ),
+  //   to: "/@manage/permissions",
+  //   children: [
+  //     {
+  //       title: "manage.sidemenu.role",
+  //       icon: (props: { active?: boolean; style?: any }) => (
+  //         <img
+  //           src={
+  //             props.active ? "/images/role-active.png" : "/images/role-gray.png"
+  //           }
+  //           alt="search"
+  //           style={{ width: "1.2em", height: "1.2em", ...(props.style || {}) }}
+  //         />
+  //       ),
+  //       to: "/@manage/permissions/role",
+  //       component: lazy(() => import("./permissions/Role")),
+  //     },
+  //   ],
+  // },
   {
-    title: "manage.sidemenu.permissions",
+    title: "manage.sidemenu.role",
     icon: (props: { active?: boolean; style?: any }) => (
-      <img
-        src={
-          props.active
-            ? "/images/permissions-active.png"
-            : "/images/permissions-gray.png"
-        }
-        alt="search"
-        style={{ width: "1.2em", height: "1.2em", ...(props.style || {}) }}
+      <FaSolidUserGear
+        style={{ width: "18px", height: "18px", ...(props.style || {}) }}
       />
     ),
-    to: "/@manage/permissions",
-    children: [
-      {
-        title: "manage.sidemenu.role",
-        icon: (props: { active?: boolean; style?: any }) => (
-          <img
-            src={
-              props.active ? "/images/role-active.png" : "/images/role-gray.png"
-            }
-            alt="search"
-            style={{ width: "1.2em", height: "1.2em", ...(props.style || {}) }}
-          />
-        ),
-        to: "/@manage/permissions/role",
-        component: lazy(() => import("./permissions/Role")),
-      },
-      // {
-      //   title: "manage.sidemenu.permissions_config",
-      //   icon: (props: { active?: boolean; style?: any }) => (
-      //     <img
-      //       src={props.active ? "/images/config-active.png" : "/images/config-gray.png"}
-      //       alt="search"
-      //       style={{ width: "1.2em", height: "1.2em", ...(props.style || {}) }}
-      //     />
-      //   ),
-      //   to: "/@manage/permissions/config",
-      //   component: lazy(() => import("./permissions/Config")),
-      // },
-    ],
+    to: "/@manage/permissions/role",
+    component: lazy(() => import("./permissions/Role")),
   },
   {
     title: "manage.sidemenu.users",
