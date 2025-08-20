@@ -323,20 +323,19 @@ export const createLabelFileBinding = (
 }
 // 批量打标签
 export const createLabelFileBindingBatch = (
-  label_ids: string,
+  labelIds: string[],
   items: StoreObj[],
 ): PEmptyResp => {
   const requestData = {
-    label_ids,
     items: items.map((obj) => ({
       path: (obj as any).path || "",
       name: obj.name,
       isDir: obj.is_dir,
-      labelIdList: [parseInt(label_ids)],
-      size: obj.size,
-      type: obj.type,
-      modified: obj.modified,
-      created: (obj as any).created || obj.modified,
+      labelIdList: labelIds.map((id) => parseInt(id)),
+      size: obj.size || 0,
+      type: obj.type || 0,
+      modified: obj.modified || "2025-08-15T00:00:00Z",
+      created: (obj as any).created || "2025-08-15T00:00:00Z",
       sign: obj.sign || "",
       thumb: obj.thumb || "",
       hashInfoStr: (obj as any).hashinfo || "",
@@ -432,4 +431,14 @@ export const updateRole = (data: RoleRequest): PEmptyResp => {
 
 export const deleteRole = (id: number): PEmptyResp => {
   return r.post(`/admin/role/delete?id=${id}`)
+}
+
+interface RegisterRequest {
+  username: string
+  password: string
+}
+
+// 用户注册
+export const register = (data: RegisterRequest): PEmptyResp => {
+  return r.post("/auth/register", data)
 }

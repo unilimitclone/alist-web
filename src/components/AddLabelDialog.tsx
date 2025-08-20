@@ -130,8 +130,10 @@ const AddLabelDialog = (props: AddLabelDialogProps) => {
               <Input
                 placeholder={t("home.tag.name")}
                 value={name()}
-                onChange={(e) => setName(e.currentTarget.value)}
+                maxLength={10}
+                onInput={(e) => setName(e.currentTarget.value)}
               />
+              <FormHelperText pl="$1">{name().length}/10</FormHelperText>
             </FormControl>
             <FormControl>
               <FormLabel>{t("home.tag.description")}</FormLabel>

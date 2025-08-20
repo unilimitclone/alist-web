@@ -82,13 +82,11 @@ const EditLabelDialog = (props: EditLabelDialogProps) => {
   const handleSubmit = async () => {
     try {
       setLoading(true)
-      const labelIdsString = selectedLabelIds().join(",")
-
       // 调用批量打标签接口
       const objectsToProcess =
         props.isBatch && props.selectedObjs ? props.selectedObjs : [props.obj]
       const resp = await createLabelFileBindingBatch(
-        labelIdsString,
+        selectedLabelIds(),
         objectsToProcess,
       )
 

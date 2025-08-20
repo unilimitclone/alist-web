@@ -99,6 +99,8 @@ const AddOrEdit = () => {
     return r.post(`/admin/user/${id ? "update" : "create"}`, user)
   })
 
+  const isNew = () => !id
+
   return (
     <VStack spacing="$2" alignItems="start" w="$full">
       <Heading>{id ? t("global.edit") : t("global.add")}</Heading>
@@ -139,31 +141,38 @@ const AddOrEdit = () => {
             </FormControl>
           </Show>
 
-          <FormControl w="$full" display="flex" flexDirection="column" required>
-            <FormLabel for="base_path" display="flex" alignItems="center">
-              {t(`users.base_path`)}
-            </FormLabel>
-            <Select
-              value={user.base_path}
-              onChange={(value) => setUser("base_path", value)}
+          <Show when={!isNew()}>
+            <FormControl
+              w="$full"
+              display="flex"
+              flexDirection="column"
+              required
             >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectListbox>
-                  <For each={paths()}>
-                    {(p) => (
-                      <SelectOption value={p}>
-                        <SelectOptionText>{p}</SelectOptionText>
-                        <SelectOptionIndicator />
-                      </SelectOption>
-                    )}
-                  </For>
-                </SelectListbox>
-              </SelectContent>
-            </Select>
-          </FormControl>
+              <FormLabel for="base_path" display="flex" alignItems="center">
+                {t(`users.base_path`)}
+              </FormLabel>
+              <Select
+                value={user.base_path}
+                onChange={(value) => setUser("base_path", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectListbox>
+                    <For each={paths()}>
+                      {(p) => (
+                        <SelectOption value={p}>
+                          <SelectOptionText>{p}</SelectOptionText>
+                          <SelectOptionIndicator />
+                        </SelectOption>
+                      )}
+                    </For>
+                  </SelectListbox>
+                </SelectContent>
+              </Select>
+            </FormControl>
+          </Show>
 
           <FormControl w="$full" display="flex" flexDirection="column" required>
             <FormLabel display="flex" alignItems="center">

@@ -23,6 +23,20 @@ import { useT } from "~/hooks"
 import { Flag, SettingItem, Type } from "~/types"
 import { TiDelete } from "solid-icons/ti"
 
+// 角色数字到字符串的映射
+const getRoleString = (value: string): string => {
+  switch (value) {
+    case "0":
+      return "general"
+    case "1":
+      return "guest"
+    case "2":
+      return "admin"
+    default:
+      return value
+  }
+}
+
 export type ItemProps = SettingItem & {
   onChange?: (value: string) => void
   onDelete?: () => void
@@ -88,9 +102,16 @@ const Item = (props: ItemProps) => {
         <Match when={props.type === Type.Select}>
           <Select
             id={props.key}
-            defaultValue={props.value}
-            // value={props.value()}
-            onChange={(e) => props.onChange?.(e)}
+            value={
+              props.key === "default_role"
+                ? getRoleString(props.value)
+                : props.value
+            }
+            onChange={(e) =>
+              props.onChange?.(
+                props.key === "default_role" ? getRoleString(e) : e,
+              )
+            }
             readOnly={props.flag === Flag.READONLY}
           >
             <SelectTrigger>
@@ -104,7 +125,10 @@ const Item = (props: ItemProps) => {
                   {(item) => (
                     <SelectOption value={item}>
                       <SelectOptionText>
-                        {t(`settings.${props.key}s.${item}`)}
+                        {/* {t(`settings.${props.key}s.${item}`)} */}
+                        {props.key === "default_role"
+                          ? t(`${item}`)
+                          : t(`settings.${props.key}s.${item}`)}
                       </SelectOptionText>
                       <SelectOptionIndicator />
                     </SelectOption>

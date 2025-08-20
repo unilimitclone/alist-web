@@ -34,6 +34,7 @@ import { createStorageSignal } from "@solid-primitives/storage"
 import { getSetting, getSettingBool, setSettings } from "~/store"
 import { SSOLogin } from "./SSOLogin"
 import { IoFingerPrint } from "solid-icons/io"
+import { register } from "~/utils/api"
 import {
   parseRequestOptionsFromJSON,
   get,
@@ -60,6 +61,23 @@ const Login = () => {
   const [useauthn, setuseauthn] = createSignal(false)
   const [remember, setRemember] = createStorageSignal("remember-pwd", "false")
   const [useLdap, setUseLdap] = createSignal(false)
+  const [isRegisterMode, setIsRegisterMode] = createSignal(false)
+
+  // 切换注册模式时清空输入框
+  const toggleRegisterMode = () => {
+    if (!isRegisterMode()) {
+      // 切换到注册模式时清空输入框
+      setUsername("")
+      setPassword("")
+    } else {
+      // 切换回登录模式时恢复记住的账号密码
+      const savedUsername = localStorage.getItem("username") || ""
+      const savedPassword = localStorage.getItem("password") || ""
+      setUsername(savedUsername)
+      setPassword(savedPassword)
+    }
+    setIsRegisterMode(!isRegisterMode())
+  }
 
   // 获取最新的设置数据
   const [settingsLoading, getSettings] = useFetch(
@@ -76,6 +94,9 @@ const Login = () => {
 
   // 使用 public/settings 接口中的 use_newui 字段
   const useNewVersion = createMemo(() => getSetting("use_newui") === "true")
+  const allowRegister = createMemo(
+    () => getSetting("allow_register") === "true",
+  )
 
   // 页面加载时刷新设置
   onMount(() => {
@@ -97,6 +118,16 @@ const Login = () => {
           otp_code: opt(),
         })
       }
+    },
+  )
+
+  // 注册接口
+  const [registerLoading, registerData] = useFetch(
+    async (): Promise<Resp<any>> => {
+      return register({
+        username: username(),
+        password: password(),
+      })
     },
   )
   const [, postauthnlogin] = useFetch(
@@ -204,35 +235,58 @@ const Login = () => {
   })
 
   const Login = async () => {
-    if (!useauthn()) {
-      if (remember() === "true") {
-        localStorage.setItem("username", username())
-        localStorage.setItem("password", password())
-      } else {
-        localStorage.removeItem("username")
-        localStorage.removeItem("password")
-      }
-      const resp = await data()
+    if (isRegisterMode()) {
+      // 注册模式
+      const resp = await registerData()
       handleRespWithoutNotify(
         resp,
         (data) => {
-          notify.success(t("login.success"))
-          changeToken(data.token)
-          to(
-            decodeURIComponent(searchParams.redirect || base_path || "/"),
-            true,
-          )
+          notify.success(t("login.register_success"))
+          // 注册成功后切换到登录模式
+          setIsRegisterMode(false)
+          // 清空密码，保留用户名
+          setPassword("")
         },
         (msg, code) => {
-          if (!needOpt() && code === 402) {
-            setNeedOpt(true)
+          if (code === 403) {
+            notify.error(t("login.register_disabled"))
           } else {
             notify.error(msg)
           }
         },
       )
     } else {
-      await AuthnLogin()
+      // 登录模式
+      if (!useauthn()) {
+        if (remember() === "true") {
+          localStorage.setItem("username", username())
+          localStorage.setItem("password", password())
+        } else {
+          localStorage.removeItem("username")
+          localStorage.removeItem("password")
+        }
+        const resp = await data()
+        handleRespWithoutNotify(
+          resp,
+          (data) => {
+            notify.success(t("login.success"))
+            changeToken(data.token)
+            to(
+              decodeURIComponent(searchParams.redirect || base_path || "/"),
+              true,
+            )
+          },
+          (msg, code) => {
+            if (!needOpt() && code === 402) {
+              setNeedOpt(true)
+            } else {
+              notify.error(msg)
+            }
+          },
+        )
+      } else {
+        await AuthnLogin()
+      }
     }
   }
   const [needOpt, setNeedOpt] = createSignal(false)
@@ -280,7 +334,7 @@ const Login = () => {
               <Flex alignItems="center" justifyContent="space-around">
                 <Image mr="$2" boxSize="$12" src={logo()} />
                 <Heading color="$info9" fontSize="$2xl">
-                  {title()}
+                  {isRegisterMode() ? t("login.register") : title()}
                 </Heading>
               </Flex>
               <Show
@@ -336,9 +390,25 @@ const Login = () => {
                   >
                     {t("login.remember")}
                   </Checkbox>
-                  <Text as="a" target="_blank" href={t("login.forget_url")}>
-                    {t("login.forget")}
-                  </Text>
+                  <Show when={!isRegisterMode()}>
+                    <Text as="a" target="_blank" href={t("login.forget_url")}>
+                      {t("login.forget")}
+                    </Text>
+                  </Show>
+                  <Show when={isRegisterMode()}>
+                    <Text
+                      as="a"
+                      onClick={toggleRegisterMode}
+                      cursor="pointer"
+                      _hover={{
+                        textDecoration: "underline",
+                        color: "#2B5CD9",
+                      }}
+                      color="#3573FF"
+                    >
+                      {t("login.go_login")}
+                    </Text>
+                  </Show>
                 </Flex>
               </Show>
               <HStack w="$full" spacing="$2">
@@ -358,8 +428,12 @@ const Login = () => {
                     {t("login.clear")}
                   </Button>
                 </Show>
-                <Button w="$full" loading={loading()} onClick={Login}>
-                  {t("login.login")}
+                <Button
+                  w="$full"
+                  loading={loading() || registerLoading()}
+                  onClick={Login}
+                >
+                  {isRegisterMode() ? t("login.register") : t("login.login")}
                 </Button>
               </HStack>
               <Show when={ldapLoginEnabled}>
@@ -386,6 +460,20 @@ const Login = () => {
               >
                 {t("login.use_guest")}
               </Button>
+              {/* 注册切换 */}
+              <Show when={!isRegisterMode() && allowRegister()}>
+                <Button
+                  w="$full"
+                  bgColor={useColorModeValue("#FFE9FB", "#491D42")()}
+                  color="#ED73D7"
+                  onClick={toggleRegisterMode}
+                  _hover={{
+                    backgroundColor: "rgba(237, 115, 215, 0.25)",
+                  }}
+                >
+                  {t("login.register")}
+                </Button>
+              </Show>
               <Flex
                 mt="$2"
                 justifyContent="space-evenly"
@@ -422,7 +510,9 @@ const Login = () => {
           >
             <Flex alignItems="center" justifyContent="center">
               <Heading color="#3573FF" fontSize="18px">
-                {t("login.password_login")}
+                {isRegisterMode()
+                  ? t("login.register")
+                  : t("login.password_login")}
               </Heading>
             </Flex>
             <Divider borderColor="#E9E9E9" />
@@ -459,7 +549,7 @@ const Login = () => {
                 <Icon as={FiUser} color="$neutral8" boxSize="$5" />
                 <Input
                   name="username"
-                  placeholder="请输入账号"
+                  placeholder={t("login.username-tips")}
                   value={username()}
                   onInput={(e) => setUsername(e.currentTarget.value)}
                   border="none"
@@ -494,7 +584,7 @@ const Login = () => {
                   <Icon as={FiLock} color="$neutral8" boxSize="$5" />
                   <Input
                     name="password"
-                    placeholder="请输入密码"
+                    placeholder={t("login.password-tips")}
                     type={showPassword() ? "text" : "password"}
                     value={password()}
                     onInput={(e) => setPassword(e.currentTarget.value)}
@@ -530,11 +620,26 @@ const Login = () => {
                   />
                 </HStack>
               </Show>
+              {/* 新版本忘记密码 */}
+              <Show when={!isRegisterMode()}>
+                <Flex
+                  px="$1"
+                  w="$full"
+                  fontSize="$sm"
+                  color="$neutral10"
+                  justifyContent="flex-end"
+                  alignItems="center"
+                >
+                  <Text as="a" target="_blank" href={t("login.forget_url")}>
+                    {t("login.forget")}
+                  </Text>
+                </Flex>
+              </Show>
             </Show>
             <VStack w="$full" spacing="$4">
               <Button
                 w="$full"
-                loading={loading()}
+                loading={loading() || registerLoading()}
                 onClick={Login}
                 bgColor="#3573FF"
                 color="white"
@@ -548,9 +653,9 @@ const Login = () => {
                 fontSize="16px"
                 fontWeight="bold"
                 borderRadius="12px"
-                mt="$5"
+                mt="$2"
               >
-                {t("login.login")}
+                {isRegisterMode() ? t("login.register") : t("login.login")}
               </Button>
 
               <HStack
@@ -558,19 +663,22 @@ const Login = () => {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Text
-                  as="a"
-                  target="_blank"
-                  href={t("login.forget_url")}
-                  color="#3573FF"
-                  fontSize="14px"
-                  cursor="pointer"
-                  _hover={{
-                    textDecoration: "underline",
-                  }}
-                >
-                  {t("login.forget")}
-                </Text>
+                <Show when={allowRegister()}>
+                  <Text
+                    color="#3573FF"
+                    fontSize="14px"
+                    cursor="pointer"
+                    onClick={toggleRegisterMode}
+                    _hover={{
+                      textDecoration: "underline",
+                      color: "#2B5CD9",
+                    }}
+                  >
+                    {isRegisterMode()
+                      ? t("login.go_login")
+                      : t("login.register")}
+                  </Text>
+                </Show>
                 <Text
                   as="a"
                   onClick={() => {
@@ -587,6 +695,7 @@ const Login = () => {
                   cursor="pointer"
                   _hover={{
                     textDecoration: "underline",
+                    color: "#2B5CD9",
                   }}
                 >
                   {t("login.use_guest")}
