@@ -23,6 +23,7 @@ import { IoFolder } from "solid-icons/io"
 import { ImAndroid } from "solid-icons/im"
 import { Obj, ObjType } from "~/types"
 import { ext } from "./path"
+import { joinBase } from "."
 import {
   VscodeIconsFileTypeAi2,
   VscodeIconsFileTypePhotoshop2,
@@ -45,7 +46,7 @@ export function createCustomIcon(imagePath: string, fallbackIcon: any) {
           a: {
             viewBox: "0 0 32 32",
           },
-          c: `<image href="${imagePath}" width="32" height="32" />`,
+          c: `<image href="${joinBase(imagePath)}" width="32" height="32" />`,
         },
         props,
       )

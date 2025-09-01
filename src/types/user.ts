@@ -41,7 +41,29 @@ export const UserPermissions = [
 export const UserMethods = {
   is_guest: (user: User) => user.role.includes(UserRole.GUEST),
   is_admin: (user: User) => user.role.includes(UserRole.ADMIN),
-  is_general: (user: User) => user.role.includes(UserRole.GENERAL),
+  is_general: (user: User) => {
+    // 除了访客(1)和管理员(2)之外的所有角色都视为普通用户
+    return (
+      !user.role.includes(UserRole.GUEST) && !user.role.includes(UserRole.ADMIN)
+    )
+  },
+  hasAccess: (user: User, requiredRole: UserRole) => {
+    if (requiredRole === UserRole.GUEST) {
+      // GUEST 权限：访客、普通用户、管理员都可以访问
+      return (
+        UserMethods.is_guest(user) ||
+        UserMethods.is_general(user) ||
+        UserMethods.is_admin(user)
+      )
+    } else if (requiredRole === UserRole.GENERAL) {
+      // GENERAL 权限：普通用户、管理员可以访问
+      return UserMethods.is_general(user) || UserMethods.is_admin(user)
+    } else if (requiredRole === UserRole.ADMIN) {
+      // ADMIN 权限：只有管理员可以访问
+      return UserMethods.is_admin(user)
+    }
+    return true // 如果没有设置角色要求，默认允许访问
+  },
   can: (user: User, permission: number, path?: string) => {
     // 如果是管理员，直接返回true
     if (UserMethods.is_admin(user)) return true

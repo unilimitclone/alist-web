@@ -442,3 +442,20 @@ interface RegisterRequest {
 export const register = (data: RegisterRequest): PEmptyResp => {
   return r.post("/auth/register", data)
 }
+// 当前用户活跃会话
+export const getMySession = (): PResp<any> => {
+  return r.get("/me/sessions")
+}
+// 踢出我的某个会话
+export const evictMySession = (session_id: string): PEmptyResp => {
+  return r.post("/me/sessions/evict", { session_id })
+}
+// 列出全站会话（管理员）
+export const getSessionList = (): PResp<any> => {
+  return r.get("/admin/session/list")
+}
+
+// 踢出指定会话（管理员）
+export const evictSession = (session_id: string): PEmptyResp => {
+  return r.post("/admin/session/evict", { session_id })
+}

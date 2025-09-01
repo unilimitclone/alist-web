@@ -1,5 +1,8 @@
 import axios from "axios"
 import { api, log } from "."
+import { bus, notify } from "."
+import { clearUserData } from "~/utils/auth"
+import { globalT } from "./i18n"
 
 const instance = axios.create({
   baseURL: api + "/api",
@@ -11,9 +14,18 @@ const instance = axios.create({
   withCredentials: false,
 })
 
+import { getClientId } from "./client-id"
+
 instance.interceptors.request.use(
   (config) => {
-    // do something before request is sent
+    // 添加 Client-Id 请求头
+    if (config.headers) {
+      config.headers["Client-Id"] = getClientId()
+      // getClientId()
+    } else {
+      config.headers = { "Client-Id": getClientId() }
+      // { "Client-Id": getClientId() }
+    }
     return config
   },
   (error) => {
@@ -40,11 +52,34 @@ instance.interceptors.response.use(
   (error) => {
     // response error
     console.error(error) // for debug
-    // notificationService.show({
-    //   status: "danger",
-    //   title: error.code,
-    //   description: error.message,
-    // });
+
+    // 处理403状态码下的特定错误
+    if (error.response?.status === 403) {
+      const errorMessage = error.response?.data?.message || error.message
+
+      if (errorMessage.includes("too many active devices")) {
+        notify.error(globalT("session.too_many_devices"))
+        return {
+          code: 403,
+          message: errorMessage,
+        }
+      }
+
+      if (errorMessage.includes("session inactive")) {
+        notify.error(globalT("session.session_inactive"))
+        // 清空本地登录态并跳转登录页
+        clearUserData()
+        bus.emit(
+          "to",
+          `/@login?redirect=${encodeURIComponent(window.location.pathname)}`,
+        )
+        return {
+          code: 403,
+          message: errorMessage,
+        }
+      }
+    }
+
     return {
       code: axios.isCancel(error) ? -1 : error.response?.status,
       message: error.message,

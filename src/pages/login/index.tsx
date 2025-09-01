@@ -27,6 +27,7 @@ import {
   base_path,
   handleResp,
   hashPwd,
+  joinBase,
 } from "~/utils"
 import { PResp, Resp } from "~/types"
 import LoginBg from "./LoginBg"
@@ -104,7 +105,7 @@ const Login = () => {
   })
 
   const [loading, data] = useFetch(
-    async (): Promise<Resp<{ token: string }>> => {
+    async (): Promise<Resp<{ token: string; device_key?: string }>> => {
       if (useLdap()) {
         return r.post("/auth/login/ldap", {
           username: username(),
@@ -136,7 +137,7 @@ const Login = () => {
       credentials: AuthenticationPublicKeyCredential,
       username: string,
       signal: AbortSignal | undefined,
-    ): Promise<Resp<{ token: string }>> =>
+    ): Promise<Resp<{ token: string; device_key?: string }>> =>
       r.post(
         "/authn/webauthn_finish_login?username=" + username,
         JSON.stringify(credentials),
@@ -211,6 +212,19 @@ const Login = () => {
         handleRespWithoutNotify(resp, (data) => {
           notify.success(t("login.success"))
           changeToken(data.token)
+          // 保存 device_key 到 localStorage
+          if (data.device_key) {
+            localStorage.setItem("device_key", data.device_key)
+            console.log("=== Login Debug (Hash) ===")
+            console.log("Saved device_key:", data.device_key)
+            console.log("Full response data:", data)
+            console.log("========================")
+          } else {
+            console.log("=== Login Debug (Hash) ===")
+            console.log("No device_key in response")
+            console.log("Full response data:", data)
+            console.log("========================")
+          }
           to(
             decodeURIComponent(searchParams.redirect || base_path || "/"),
             true,
@@ -271,6 +285,19 @@ const Login = () => {
           (data) => {
             notify.success(t("login.success"))
             changeToken(data.token)
+            // 保存 device_key 到 localStorage
+            if (data.device_key) {
+              localStorage.setItem("device_key", data.device_key)
+              console.log("=== Login Debug ===")
+              console.log("Saved device_key:", data.device_key)
+              console.log("Full response data:", data)
+              console.log("==================")
+            } else {
+              console.log("=== Login Debug ===")
+              console.log("No device_key in response")
+              console.log("Full response data:", data)
+              console.log("==================")
+            }
             to(
               decodeURIComponent(searchParams.redirect || base_path || "/"),
               true,
@@ -306,11 +333,11 @@ const Login = () => {
           <HStack alignItems="center" spacing="$2">
             <Image
               w="151px"
-              h="48px"
+              h="auto"
               src={
                 getSetting("logo").split("\n")[0] ===
                 "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg"
-                  ? "/images/new_icon.png"
+                  ? joinBase("/images/new_icon.png")
                   : getSetting("logo").split("\n")[0]
               }
               alt="AList Logo"

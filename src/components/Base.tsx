@@ -48,8 +48,22 @@ export const Error = (props: {
     )
   }
 
+  // 检查是否是设备数上限错误
+  const isTooManyDevicesError = () => {
+    return props.msg.includes("too many active devices")
+  }
+
+  // 检查是否是会话失效错误
+  const isSessionInactiveError = () => {
+    return props.msg.includes("session inactive")
+  }
+
   const handleGoToStorages = () => {
     to("/@manage/storages")
+  }
+
+  const handleGoToLogin = () => {
+    to(`/@login?redirect=${encodeURIComponent(window.location.pathname)}`)
   }
 
   return (
@@ -61,18 +75,35 @@ export const Error = (props: {
         bgColor={useColorModeValue("white", "$neutral3")()}
       >
         <VStack spacing="$4" textAlign="center">
-          <Heading
-            css={{
-              wordBreak: "break-all",
-            }}
-          >
-            {props.msg}
-          </Heading>
+          <Show when={!isTooManyDevicesError() && !isSessionInactiveError()}>
+            <Heading
+              css={{
+                wordBreak: "break-all",
+              }}
+            >
+              {props.msg}
+            </Heading>
+          </Show>
 
           <Show when={isStorageError()}>
             <Button onClick={handleGoToStorages} size="md">
               {t("home.go_to_storages")}
             </Button>
+          </Show>
+
+          <Show when={isTooManyDevicesError()}>
+            <VStack spacing="$2">
+              <Text fontSize="sm">{t("session.too_many_devices")}</Text>
+            </VStack>
+          </Show>
+
+          <Show when={isSessionInactiveError()}>
+            <VStack spacing="$2">
+              <Text fontSize="sm">{t("session.session_inactive")}</Text>
+              <Button onClick={handleGoToLogin} size="md" colorScheme="accent">
+                {t("global.go_login")}
+              </Button>
+            </VStack>
           </Show>
 
           <Show when={!props.disableColor}>

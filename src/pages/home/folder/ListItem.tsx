@@ -24,7 +24,6 @@ import { ObjType, StoreObj, Obj } from "~/types"
 import { bus, formatDate, getFileSize, hoverColor } from "~/utils"
 import { getIconByObj } from "~/utils/icon"
 import { ItemCheckbox, useSelectWithMouse } from "./helper"
-import { UserMethods } from "~/types"
 import { me } from "~/store"
 import { getColorWithOpacity } from "~/utils/color"
 import { pathJoin } from "~/utils/path"
@@ -52,9 +51,9 @@ export const cols: Col[] = [
   {
     name: "size",
     textAlign: "right",
-    w: { "@initial": "100px", "@md": "12%" },
+    w: { "@initial": "100px", "@md": "30%" },
   },
-  { name: "modified", textAlign: "right", w: { "@initial": 0, "@md": "20%" } },
+  { name: "modified", textAlign: "right", w: { "@initial": 0, "@md": "25%" } },
 ]
 
 // 添加选中统计组件

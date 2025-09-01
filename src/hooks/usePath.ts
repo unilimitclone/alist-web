@@ -45,6 +45,7 @@ export const usePath = () => {
 
   // 统一的路径处理函数
   const getProcessedPath = (path: string): string => {
+    if (path === "/") return "/"
     // 如果路径已经包含了权限路径，直接返回
 
     const userPermissions = me().permissions || []
@@ -148,13 +149,15 @@ export const usePath = () => {
     retry_pass = rp ?? false
     ObjStore.setErr("")
 
-    // 如果是初始状态且当前路径是根路径，检查权限路径
-    if (!force && first_fetch && path === "/") {
+    if (first_fetch) {
       first_fetch = false
-      const userPermissions = me().permissions || []
+    }
+
+    const userPermissions = me().permissions || []
+    if (path === "/") {
       // 如果有权限路径是"/"，直接获取文件列表
       if (userPermissions.some((perm) => perm.path === "/")) {
-        return handleFolder("/", index)
+        return handleFolder("/", index, undefined, undefined, force)
       }
       // 否则显示权限目录列表
       if (userPermissions.length > 0) {
@@ -178,11 +181,6 @@ export const usePath = () => {
         ObjStore.setState(State.Initial)
       }
       return Promise.resolve()
-    }
-
-    // 如果不是首次加载，或者当前路径不是根路径，正常处理路径
-    if (first_fetch) {
-      first_fetch = false
     }
 
     if (hasHistory(path, index)) {

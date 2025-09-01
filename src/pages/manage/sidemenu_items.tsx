@@ -21,10 +21,13 @@ import { CgDatabase } from "solid-icons/cg"
 import { OcWorkflow2 } from "solid-icons/oc"
 import { IoCopy, IoHome, IoMagnetOutline } from "solid-icons/io"
 import { Component, lazy } from "solid-js"
+import { joinBase } from "~/utils"
 import { Group, UserRole } from "~/types"
 import { FaSolidBook, FaSolidDatabase } from "solid-icons/fa"
-import { TbArchive } from "solid-icons/tb"
+import { TbArchive, TbDevices2 } from "solid-icons/tb"
 import { FaSolidUserGear } from "solid-icons/fa"
+import { BiRegularMessageAltDetail } from "solid-icons/bi"
+import { RiCommunicationChatSettingsLine } from "solid-icons/ri"
 
 export type SideMenuItem = SideMenuItemProps & {
   component?: Component
@@ -45,6 +48,7 @@ export const side_menu_items: SideMenuItem[] = [
     title: "manage.sidemenu.settings",
     icon: BsGearFill,
     to: "/@manage/settings",
+    role: UserRole.ADMIN,
     children: [
       {
         title: "manage.sidemenu.site",
@@ -93,7 +97,9 @@ export const side_menu_items: SideMenuItem[] = [
         icon: (props: { active?: boolean; style?: any }) => (
           <img
             src={
-              props.active ? "/images/tag-active.png" : "/images/tag-gray.png"
+              props.active
+                ? joinBase("/images/tag-active.png")
+                : joinBase("/images/tag-gray.png")
             }
             alt="search"
             style={{ width: "1.1em", height: "1.1em", ...(props.style || {}) }}
@@ -209,36 +215,76 @@ export const side_menu_items: SideMenuItem[] = [
       />
     ),
     to: "/@manage/permissions/role",
+    role: UserRole.ADMIN,
     component: lazy(() => import("./permissions/Role")),
   },
   {
     title: "manage.sidemenu.users",
     icon: BsPersonCircle,
     to: "/@manage/users",
+    role: UserRole.ADMIN,
     component: lazy(() => import("./users/Users")),
+  },
+  {
+    title: "manage.sidemenu.session",
+    icon: (props: { active?: boolean; style?: any }) => (
+      <BiRegularMessageAltDetail
+        style={{ width: "18px", height: "18px", ...(props.style || {}) }}
+      />
+    ),
+    to: "/@manage/session",
+    role: UserRole.GENERAL,
+    children: [
+      {
+        title: "manage.sidemenu.my_session",
+        icon: (props: { active?: boolean; style?: any }) => (
+          <TbDevices2
+            style={{ width: "19px", height: "19px", ...(props.style || {}) }}
+          />
+        ),
+        to: "/@manage/session/my_session",
+        role: UserRole.GENERAL,
+        component: lazy(() => import("./session/mySession")),
+      },
+      {
+        title: "manage.sidemenu.session_management",
+        role: UserRole.ADMIN,
+        icon: (props: { active?: boolean; style?: any }) => (
+          <RiCommunicationChatSettingsLine
+            style={{ width: "18px", height: "18px", ...(props.style || {}) }}
+          />
+        ),
+        to: "/@manage/session/management",
+        component: lazy(() => import("./session/management")),
+      },
+    ],
   },
   {
     title: "manage.sidemenu.storages",
     icon: CgDatabase,
     to: "/@manage/storages",
+    role: UserRole.ADMIN,
     component: lazy(() => import("./storages/Storages")),
   },
   {
     title: "manage.sidemenu.metas",
     icon: SiMetabase,
     to: "/@manage/metas",
+    role: UserRole.ADMIN,
     component: lazy(() => import("./metas/Metas")),
   },
   {
     title: "manage.sidemenu.indexes",
     icon: BsSearch,
     to: "/@manage/indexes",
+    role: UserRole.ADMIN,
     component: lazy(() => import("./indexes/indexes")),
   },
   {
     title: "manage.sidemenu.backup-restore",
     to: "/@manage/backup-restore",
     icon: FaSolidDatabase,
+    role: UserRole.ADMIN,
     component: lazy(() => import("./backup-restore")),
   },
   {

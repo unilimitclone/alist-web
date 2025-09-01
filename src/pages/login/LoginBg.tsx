@@ -1,4 +1,5 @@
 import { Box, useColorModeValue } from "@hope-ui/solid"
+import { joinBase } from "~/utils"
 import CornerBottom from "./CornerBottom"
 import CornerTop from "./CornerTop"
 import { Show } from "solid-js"
@@ -15,7 +16,7 @@ const LoginBg = (props: LoginBgProps) => {
       style={
         props.useNewVersion
           ? {
-              "background-image": "url(/images/new_bg.png)",
+              "background-image": `url(${joinBase("/images/new_bg.png")})`,
               "background-size": "cover",
               "background-position": "center",
             }

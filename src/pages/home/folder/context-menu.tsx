@@ -12,7 +12,7 @@ import {
   lazy,
   Suspense,
 } from "solid-js"
-import { bus, convertURL, notify } from "~/utils"
+import { bus, convertURL, notify, joinBase } from "~/utils"
 import { ObjType, UserMethods, UserPermissions } from "~/types"
 import {
   getSettingBool,
@@ -257,7 +257,7 @@ export const ContextMenu = () => {
                     <Image
                       m="0 auto"
                       boxSize="$7"
-                      src={`${window.__dynamic_base__}/images/${player.icon}.webp`}
+                      src={joinBase(`/images/${player.icon}.webp`)}
                     />
                     <Text>{player.name}</Text>
                   </HStack>

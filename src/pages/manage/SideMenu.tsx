@@ -30,11 +30,24 @@ export interface SideMenuItemProps {
 
 const SideMenuItem = (props: SideMenuItemProps) => {
   const ifShow = createMemo(() => {
-    if (!UserMethods.is_admin(me())) {
-      if (props.role === undefined) return false
-      else if (props.role === UserRole.GENERAL && !UserMethods.is_general(me()))
-        return false
+    // 使用层级权限检查
+    if (props.role !== undefined && !UserMethods.hasAccess(me(), props.role)) {
+      return false
     }
+
+    // 如果有子菜单项，检查是否有可见的子菜单项
+    if (props.children) {
+      const hasVisibleChildren = props.children.some((child) => {
+        if (child.role !== undefined) {
+          return UserMethods.hasAccess(me(), child.role)
+        }
+        return true
+      })
+      if (!hasVisibleChildren) {
+        return false
+      }
+    }
+
     return true
   })
   return (
@@ -102,6 +115,18 @@ const SideMenuItemWithChildren = (props: SideMenuItemProps) => {
   const { pathname } = useRouter()
   const [open, setOpen] = createSignal(pathname().includes(props.to))
   const t = useT()
+
+  // 检查是否有可见的子菜单项
+  const hasVisibleChildren = createMemo(() => {
+    if (!props.children) return false
+    return props.children.some((child) => {
+      if (child.role !== undefined) {
+        return UserMethods.hasAccess(me(), child.role)
+      }
+      return true
+    })
+  })
+
   return (
     <Box w="$full">
       <Flex
@@ -135,7 +160,7 @@ const SideMenuItemWithChildren = (props: SideMenuItemProps) => {
           transition="transform 0.2s"
         />
       </Flex>
-      <Show when={open()}>
+      <Show when={open() && hasVisibleChildren()}>
         <Box pl="$2">
           <SideMenu items={props.children!} />
         </Box>

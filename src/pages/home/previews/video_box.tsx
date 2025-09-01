@@ -11,7 +11,7 @@ import { For, JSXElement } from "solid-js"
 import { useRouter, useLink, useT } from "~/hooks"
 import { objStore } from "~/store"
 import { ObjType } from "~/types"
-import { convertURL } from "~/utils"
+import { convertURL, joinBase } from "~/utils"
 import Artplayer from "artplayer"
 import { SelectWrapper } from "~/components"
 
@@ -141,7 +141,7 @@ export const VideoBox = (props: {
                   <Image
                     m="0 auto"
                     boxSize="$8"
-                    src={`${window.__dynamic_base__}/images/${item.icon}.webp`}
+                    src={joinBase(`/images/${item.icon}.webp`)}
                   />
                 </Anchor>
               </Tooltip>
