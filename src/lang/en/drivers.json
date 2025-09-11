@@ -73,6 +73,7 @@
   "123Pan": {
     "password": "Password",
     "root_folder_id": "Root folder id",
+    "safe_password": "Safe password",
     "username": "Username"
   },
   "123PanLink": {
