@@ -27,6 +27,8 @@
   "permission": "Permission",
   "disabled": "Disabled",
   "available": "Available",
+  "max_devices": "Max devices",
+  "session_ttl": "Session TTL",
   "update_profile": "Update Profile",
   "update_profile_success": "Update profile successfully, please re-login.",
   "change_username": "Change Username",

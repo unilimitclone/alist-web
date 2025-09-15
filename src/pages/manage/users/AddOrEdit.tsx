@@ -51,6 +51,8 @@ const AddOrEdit = () => {
     sso_id: "",
     role_info: [],
     permissions: [],
+    max_devices: undefined,
+    session_ttl: undefined,
   })
 
   const [rolesLoading, loadRoles] = useFetch(() => getRoleList())
@@ -271,6 +273,44 @@ const AddOrEdit = () => {
             >
               {t(`users.disabled`)}
             </Checkbox>
+          </FormControl>
+
+          <FormControl w="$full" display="flex" flexDirection="column">
+            <FormLabel for="max_devices" display="flex" alignItems="center">
+              {t(`users.max_devices`)}
+            </FormLabel>
+            <Input
+              id="max_devices"
+              type="number"
+              value={user.max_devices ?? ""}
+              onInput={(e) =>
+                setUser(
+                  "max_devices",
+                  e.currentTarget.value
+                    ? Number(e.currentTarget.value)
+                    : undefined,
+                )
+              }
+            />
+          </FormControl>
+
+          <FormControl w="$full" display="flex" flexDirection="column">
+            <FormLabel for="session_ttl" display="flex" alignItems="center">
+              {t(`users.session_ttl`)}
+            </FormLabel>
+            <Input
+              id="session_ttl"
+              type="number"
+              value={user.session_ttl ?? ""}
+              onInput={(e) =>
+                setUser(
+                  "session_ttl",
+                  e.currentTarget.value
+                    ? Number(e.currentTarget.value)
+                    : undefined,
+                )
+              }
+            />
           </FormControl>
 
           <Button

@@ -502,6 +502,11 @@
     "token": "Token",
     "token-tips": "GitHub token, if you want to access private repositories or increase the rate limit"
   },
+  "Gofile": {
+    "api_token": "Api token",
+    "api_token-tips": "Get your API token from your Gofile profile page",
+    "root_folder_id": "Root folder id"
+  },
   "GoogleDrive": {
     "chunk_size": "Chunk size",
     "chunk_size-tips": "chunk size while uploading (unit: MB)",
@@ -612,6 +617,25 @@
     "thumbnail-tips": "enable thumbnail",
     "video_thumb_pos": "Video thumb pos",
     "video_thumb_pos-tips": "The position of the video thumbnail. If the value is a number (integer ot floating point), it represents the time in seconds. If the value ends with '%', it represents the percentage of the video duration."
+  },
+  "MediaFire": {
+    "chunk_size": "Chunk size",
+    "cookie": "Cookie",
+    "cookie-tips": "Required for navigation",
+    "order_by": "Order by",
+    "order_bys": {
+      "name": "Name",
+      "size": "Size",
+      "time": "Time"
+    },
+    "order_direction": "Order direction",
+    "order_directions": {
+      "asc": "Asc",
+      "desc": "Desc"
+    },
+    "root_folder_path": "Root folder path",
+    "session_token": "Session token",
+    "session_token-tips": "Required for MediaFire API"
   },
   "MediaTrack": {
     "access_token": "Access token",
@@ -1167,6 +1191,7 @@
     "FeijiPan": {},
     "GitHub API": {},
     "GitHub Releases": {},
+    "Gofile": {},
     "GoogleDrive": {},
     "GooglePhoto": {},
     "HalalCloud": {},
@@ -1177,6 +1202,7 @@
     "Lark": {},
     "LenovoNasShare": {},
     "Local": {},
+    "MediaFire": {},
     "MediaTrack": {},
     "Mega_nz": {},
     "Misskey": {},
@@ -1250,6 +1276,7 @@
     "FeijiPan": "FeijiPan",
     "GitHub API": "GitHub API",
     "GitHub Releases": "GitHub Releases",
+    "Gofile": "Gofile",
     "GoogleDrive": "GoogleDrive",
     "GooglePhoto": "GooglePhoto",
     "HalalCloud": "HalalCloud",
@@ -1260,6 +1287,7 @@
     "Lark": "Lark",
     "LenovoNasShare": "LenovoNasShare",
     "Local": "Local",
+    "MediaFire": "MediaFire",
     "MediaTrack": "MediaTrack",
     "Mega_nz": "Mega nz",
     "Misskey": "Misskey",

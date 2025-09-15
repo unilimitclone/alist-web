@@ -18,6 +18,8 @@ export interface User {
   }[]
   sso_id: string
   disabled: boolean
+  max_devices?: number
+  session_ttl?: number
   // otp: boolean;
 }
 

@@ -13,7 +13,7 @@ import {
 import { useT, useRouter } from "~/hooks"
 import { For, createSignal, onMount } from "solid-js"
 import { DeletePopover } from "~/pages/manage/common/DeletePopover"
-import { getSessionList, evictSession } from "~/utils/api"
+import { getSessionList, evictSession, cleanSessions } from "~/utils/api"
 import { handleResp, notify } from "~/utils"
 import { clearUserData } from "~/utils/auth"
 import { getSystemDisplayName } from "~/utils/ua-parser"
@@ -25,6 +25,7 @@ const Manage = () => {
   const [loading, setLoading] = createSignal(false)
   const [error, setError] = createSignal<string | null>(null)
   const [kickingSession, setKickingSession] = createSignal<string | null>(null)
+  const [cleaning, setCleaning] = createSignal(false)
 
   const handleKickOut = async (sessionId: string) => {
     setKickingSession(sessionId)
@@ -92,6 +93,27 @@ const Manage = () => {
     fetchSessions()
   })
 
+  const handleClean = async () => {
+    setCleaning(true)
+    try {
+      const resp = await cleanSessions()
+      handleResp(
+        resp,
+        () => {
+          notify.success(t("session.clean_success"))
+          fetchSessions()
+        },
+        (message) => {
+          notify.error(message || t("session.clean_failed"))
+        },
+      )
+    } catch (err) {
+      notify.error(t("session.clean_failed"))
+    } finally {
+      setCleaning(false)
+    }
+  }
+
   return (
     <VStack spacing="$2" alignItems="start" w="$full">
       <HStack spacing="$2">
@@ -101,6 +123,9 @@ const Manage = () => {
           onClick={fetchSessions}
         >
           {t("global.refresh")}
+        </Button>
+        <Button colorScheme="danger" loading={cleaning()} onClick={handleClean}>
+          {t("session.clean")}
         </Button>
       </HStack>
       {error() && (
@@ -120,6 +145,7 @@ const Manage = () => {
                   { key: "last_active", align: "center" },
                   { key: "status", align: "center" },
                   { key: "user_id", align: "center" },
+                  { key: "username", align: "center" },
                   { key: "operations", align: "center" },
                 ]}
               >
@@ -182,6 +208,11 @@ const Manage = () => {
                         key: "user_id",
                         align: "center",
                         content: session.user_id,
+                      },
+                      {
+                        key: "username",
+                        align: "center",
+                        content: session.username || "-",
                       },
 
                       {

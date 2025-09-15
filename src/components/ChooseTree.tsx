@@ -305,7 +305,6 @@ const FolderTreeNode = (props: FolderTreeNodeProps) => {
     } else {
       onChange("/" + segments.join("/"))
     }
-    console.log("========== 节点点击结束 ==========\n")
   }
 
   const emptyIconVisible = () =>
@@ -361,21 +360,21 @@ const FolderTreeNode = (props: FolderTreeNodeProps) => {
     const shouldExpand = () => {
       if (manuallyCollapsed()) return false
 
-      // 如果是根节点且有选中路径，展开
-      if (currentLevel === 0 && paths?.length) {
-        return true
-      }
+      // // 如果是根节点，不自动展开（让用户手动控制）
+      // if (currentLevel === 0) {
+      //   return false
+      // }
 
-      // 如果是前三层且是选中路径的父节点，展开
-      if (
-        currentLevel < 3 &&
-        paths?.some((path) => {
-          const pathStr = path.join("/")
-          return pathStr.startsWith(currentPath + "/")
-        })
-      ) {
-        return true
-      }
+      // // 如果是前三层且是选中路径的父节点，展开
+      // if (
+      //   currentLevel < 3 &&
+      //   paths?.some((path) => {
+      //     const pathStr = path.join("/")
+      //     return pathStr.startsWith(currentPath + "/")
+      //   })
+      // ) {
+      //   return true
+      // }
 
       return false
     }
@@ -389,16 +388,23 @@ const FolderTreeNode = (props: FolderTreeNodeProps) => {
 
   const checkIfShouldOpen = async (pathname: string) => {
     // 检查当前节点层级
-    const currentLevel = props.segments.length
-    if (currentLevel >= 3) {
-      return
-    }
+    // const currentLevel = props.segments.length
+    // if (currentLevel >= 3) {
+    //   return
+    // }
 
-    if (!autoOpen) return
-    if (isMatchedFolder(pathname)) {
-      if (!isOpen()) onToggle()
-      if (!isLoaded) load()
-    }
+    // // 根节点不自动展开
+    // if (currentLevel === 0) {
+    //   return
+    // }
+
+    // if (!autoOpen) return
+    // if (isMatchedFolder(pathname)) {
+    //   if (!isOpen()) onToggle()
+    //   if (!isLoaded) load()
+    // }
+    // 不自动展开任何节点，让用户手动控制
+    return
   }
   createEffect(on(value, checkIfShouldOpen))
   const isHiddenFolder = () =>
@@ -800,23 +806,25 @@ export const ChooseTree = (props: ChooseTreeProps) => {
     const currentPath = segments.join("/")
 
     if (checked) {
-      // 添加当前路径（如果不是根节点）
-      if (
-        segments.length > 0 &&
-        !newPaths.some((path) => path.join("/") === currentPath)
-      ) {
-        newPaths.push(segments)
-      }
-
-      // 如果有子路径，添加所有子路径
-      if (childPaths) {
-        childPaths.forEach((childPath) => {
-          if (
-            !newPaths.some((path) => path.join("/") === childPath.join("/"))
-          ) {
-            newPaths.push(childPath)
-          }
-        })
+      // 如果是根节点，只添加根路径，不添加子路径
+      if (segments.length === 0) {
+        // 清空所有选择，只保留根路径
+        newPaths = [[]]
+      } else {
+        // 添加当前路径（非根节点）
+        if (!newPaths.some((path) => path.join("/") === currentPath)) {
+          newPaths.push(segments)
+        }
+        // 如果有子路径，添加所有子路径
+        if (childPaths) {
+          childPaths.forEach((childPath) => {
+            if (
+              !newPaths.some((path) => path.join("/") === childPath.join("/"))
+            ) {
+              newPaths.push(childPath)
+            }
+          })
+        }
       }
     } else {
       // 如果是根节点，清空所有选择

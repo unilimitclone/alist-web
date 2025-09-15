@@ -459,3 +459,10 @@ export const getSessionList = (): PResp<any> => {
 export const evictSession = (session_id: string): PEmptyResp => {
   return r.post("/admin/session/evict", { session_id })
 }
+
+export const cleanSessions = (data?: {
+  user_id?: number
+  session_id?: string
+}): PEmptyResp => {
+  return r.post("/admin/session/clean", data || {})
+}
