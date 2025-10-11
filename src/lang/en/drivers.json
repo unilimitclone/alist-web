@@ -68,7 +68,11 @@
   "123 Open": {
     "client_id": "Client id",
     "client_secret": "Client secret",
-    "root_folder_id": "Root folder id"
+    "private_key": "Private key",
+    "root_folder_id": "Root folder id",
+    "uid": "Uid",
+    "valid_duration": "Valid duration",
+    "valid_duration-tips": "minutes"
   },
   "123Pan": {
     "password": "Password",
