@@ -17,6 +17,7 @@ export interface StoreObj {
   thumb?: string
   type: number
   selected?: boolean
+  storage_class?: string
   label_list?: {
     id: number
     name: string

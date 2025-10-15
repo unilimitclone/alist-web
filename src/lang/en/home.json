@@ -5,6 +5,23 @@
     "tag": "Tag",
     "modified": "Modified"
   },
+  "storage_class": {
+    "label": "Storage class",
+    "standard": "Standard",
+    "standard_ia": "Standard-Infrequent Access",
+    "intelligent_tiering": "Intelligent-Tiering",
+    "onezone_ia": "One Zone-Infrequent Access",
+    "glacier": "Glacier",
+    "glacier_ir": "Glacier Instant Retrieval",
+    "deep_archive": "Deep Archive",
+    "reduced_redundancy": "Reduced Redundancy",
+    "coldline": "Coldline",
+    "archive": "Archive",
+    "nearline": "Nearline",
+    "hot": "Hot",
+    "cool": "Cool",
+    "backup": "Backup"
+  },
   "tag": {
     "add": "Add Tag",
     "edit": "Edit Tag",
