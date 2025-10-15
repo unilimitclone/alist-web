@@ -203,6 +203,41 @@ export const fsArchiveDecompress = (
   })
 }
 
+export type S3TransitionArchivePayload = {
+  action: "archive"
+  storage_class: string
+  days?: number
+}
+
+export type S3TransitionRestorePayload = {
+  action: "restore"
+  days: number
+  tier?: string
+}
+
+export type S3TransitionPayload =
+  | S3TransitionArchivePayload
+  | S3TransitionRestorePayload
+
+export type S3TransitionResponse = {
+  task_id?: number | string
+}
+
+export const fsS3Transition = (
+  path: string,
+  payload: S3TransitionPayload,
+  password = "",
+): PResp<S3TransitionResponse> => {
+  const { action, ...rest } = payload
+  const method = action === "archive" ? "s3_archive" : "s3_restore"
+  return r.post("/fs/other", {
+    path,
+    password,
+    method,
+    ...rest,
+  })
+}
+
 export const offlineDownload = (
   path: string,
   urls: string[],

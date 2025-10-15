@@ -83,6 +83,31 @@
     "decompress-cache-full": "Cache full into a temp-file",
     "decompress-put-into-new": "Decompress into a new sub-folder",
     "extract": "Extract to",
+    "s3_archive": "Archive",
+    "s3_restore": "Thaw / Restore",
+    "s3_transition": {
+      "title_archive": "Archive selected objects",
+      "title_restore": "Restore selected objects",
+      "selection": "{{count}} item(s) selected",
+      "current_class": "Current storage class: {{value}}",
+      "storage_class": "Target storage class",
+      "transition_days": "Transition after (days)",
+      "transition_days_hint": "Leave empty to transition immediately",
+      "invalid_transition_days": "Please enter a non-negative number of days.",
+      "restore_days": "Restore for (days)",
+      "restore_tier": "Retrieval tier",
+      "tier": {
+        "standard": "Standard",
+        "bulk": "Bulk",
+        "expedited": "Expedited"
+      },
+      "invalid_restore_days": "Please enter the number of days to keep the restored copy.",
+      "archive_success": "Archive request submitted for {{count}} item(s).",
+      "restore_success": "Restore request submitted for {{count}} item(s).",
+      "task_created": "Background task created for {{count}} item(s).",
+      "task_ids": "Task ID(s): {{ids}}",
+      "task_link": "Open task center"
+    },
     "archive": {
       "input_password": "Please input extraction password",
       "incorrect_password": "Incorrect password",
