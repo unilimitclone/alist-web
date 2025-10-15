@@ -228,13 +228,12 @@ export const fsS3Transition = (
   payload: S3TransitionPayload,
   password = "",
 ): PResp<S3TransitionResponse> => {
-  const { action, ...rest } = payload
-  const method = action === "archive" ? "archive" : "thaw"
+  const method = payload.action === "archive" ? "archive" : "thaw"
   return r.post("/fs/other", {
     path,
     password,
     method,
-    ...rest,
+    data: payload,
   })
 }
 
