@@ -25,6 +25,7 @@
     "upload": "Upload",
     "copy": "Copy",
     "decompress": "Decompress",
+    "s3_transition": "S3 Transition",
     "backup-restore": "Backup & Restore",
     "home": "Home",
     "indexes": "Indexes",

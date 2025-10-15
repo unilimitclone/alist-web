@@ -101,8 +101,24 @@ export const S3TransitionModal = () => {
     }))
 
   const resolvePath = (target: Target) => {
-    if (target.path) return target.path
-    return pathJoin(pathname(), target.name)
+    const currentDir = pathJoin("/", pathname())
+    const computed = pathJoin(currentDir, target.name)
+
+    if (target.path) {
+      const normalizedTarget = pathJoin("/", target.path)
+
+      if (normalizedTarget === computed) {
+        return normalizedTarget
+      }
+
+      if (computed.endsWith(normalizedTarget)) {
+        return computed
+      }
+
+      return normalizedTarget
+    }
+
+    return computed
   }
 
   const submit = async () => {
@@ -171,17 +187,19 @@ export const S3TransitionModal = () => {
       const taskIds = responses.filter((id): id is string | number => !!id)
       if (taskIds.length) {
         notify.render(
-          <VStack alignItems="start" spacing="$1">
-            <Text>
+          <div
+            style={{ display: "flex", "flex-direction": "column", gap: "4px" }}
+          >
+            <span>
               {t("home.toolbar.s3_transition.task_created", {
                 count: taskIds.length,
               })}
-            </Text>
-            <Text>
+            </span>
+            <span>
               {t("home.toolbar.s3_transition.task_ids", {
                 ids: taskIds.join(", "),
               })}
-            </Text>
+            </span>
             <a
               href={joinBase("/@manage/tasks")}
               target="_blank"
@@ -189,7 +207,7 @@ export const S3TransitionModal = () => {
             >
               {t("home.toolbar.s3_transition.task_link")}
             </a>
-          </VStack>,
+          </div>,
         )
       }
 
@@ -235,7 +253,7 @@ export const S3TransitionModal = () => {
                   {item.name}
                   <Show when={item.storage_class}>
                     {(storage) => {
-                      const normalized = normalizeStorageClass(storage())
+                      const normalized = normalizeStorageClass(storage)
                       const label =
                         normalized && normalized.length > 0
                           ? t(`home.storage_class.${normalized}`)
@@ -245,7 +263,7 @@ export const S3TransitionModal = () => {
                           {" "}
                           —
                           {t("home.toolbar.s3_transition.current_class", {
-                            value: label || storage(),
+                            value: label || storage,
                           })}
                         </>
                       )

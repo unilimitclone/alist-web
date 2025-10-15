@@ -174,6 +174,13 @@ export const side_menu_items: SideMenuItem[] = [
         role: UserRole.GENERAL,
         component: lazy(() => import("./tasks/Decompress")),
       },
+      {
+        title: "manage.sidemenu.s3_transition",
+        icon: BsBucket,
+        to: "/@manage/tasks/s3_transition",
+        role: UserRole.GENERAL,
+        component: lazy(() => import("./tasks/S3Transition")),
+      },
     ],
   },
   // {
