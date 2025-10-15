@@ -10,6 +10,17 @@ import { ResponsiveGrid } from "../common/ResponsiveGrid"
 export interface CommonSettingsProps {
   group: Group
 }
+const buildSettingsPayload = (settings: SettingItem[]) => {
+  const target = getTarget(settings) as SettingItem[]
+  const allowRegister = target.find((item) => item.key === "allow_register")
+
+  if (allowRegister?.value !== "true") {
+    return target.filter((item) => item.key !== "default_role")
+  }
+
+  return target
+}
+
 const CommonSettings = (props: CommonSettingsProps) => {
   const t = useT()
   const { pathname } = useRouter()
@@ -25,7 +36,8 @@ const CommonSettings = (props: CommonSettingsProps) => {
   }
   refresh()
   const [saveLoading, saveSettings] = useFetch(
-    (): PEmptyResp => r.post("/admin/setting/save", getTarget(settings)),
+    (): PEmptyResp =>
+      r.post("/admin/setting/save", buildSettingsPayload(settings)),
   )
   const [loading, setLoading] = createSignal(false)
 

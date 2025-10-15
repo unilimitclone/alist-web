@@ -68,7 +68,11 @@
   "123 Open": {
     "client_id": "Client id",
     "client_secret": "Client secret",
-    "root_folder_id": "Root folder id"
+    "private_key": "Private key",
+    "root_folder_id": "Root folder id",
+    "uid": "Uid",
+    "valid_duration": "Valid duration",
+    "valid_duration-tips": "minutes"
   },
   "123Pan": {
     "password": "Password",
@@ -505,6 +509,10 @@
   "Gofile": {
     "api_token": "Api token",
     "api_token-tips": "Get your API token from your Gofile profile page",
+    "direct_link_expiry": "Direct link expiry",
+    "direct_link_expiry-tips": "Direct link expiration time in hours on Gofile server. Set to 0 for no expiration",
+    "link_expiry": "Link expiry",
+    "link_expiry-tips": "Direct link cache duration in days. Set to 0 to disable caching",
     "root_folder_id": "Root folder id"
   },
   "GoogleDrive": {
@@ -757,6 +765,12 @@
     "share_id": "Share id",
     "share_pwd": "Share pwd",
     "use_transcoding_address": "Use transcoding address"
+  },
+  "ProtonDrive": {
+    "password": "Password",
+    "root_folder_path": "Root folder path",
+    "two_fa_code,omitempty": "Two fa code,omitempty",
+    "username": "Username"
   },
   "Quark": {
     "cookie": "Cookie",
@@ -1215,6 +1229,7 @@
     "OnedriveAPP": {},
     "PikPak": {},
     "PikPakShare": {},
+    "ProtonDrive": {},
     "Quark": {},
     "QuarkTV": {},
     "Quqi": {},
@@ -1240,7 +1255,8 @@
     "WebDav": {},
     "WeiYun": {},
     "WoPan": {},
-    "YandexDisk": {}
+    "YandexDisk": {},
+    "pCloud": {}
   },
   "drivers": {
     "115 Cloud": "115 Cloud",
@@ -1298,6 +1314,7 @@
     "OnedriveAPP": "OnedriveAPP",
     "PikPak": "PikPak",
     "PikPakShare": "PikPakShare",
+    "ProtonDrive": "ProtonDrive",
     "Quark": "Quark",
     "QuarkTV": "QuarkTV",
     "Quqi": "Quqi",
@@ -1323,6 +1340,23 @@
     "WebDav": "WebDav",
     "WeiYun": "WeiYun",
     "WoPan": "WoPan",
-    "YandexDisk": "YandexDisk"
+    "YandexDisk": "YandexDisk",
+    "pCloud": "PCloud"
+  },
+  "pCloud": {
+    "access_token": "Access token",
+    "access_token-tips": "OAuth token from pCloud authorization",
+    "client_id": "Client id",
+    "client_id-tips": "Custom OAuth client ID (optional)",
+    "client_secret": "Client secret",
+    "client_secret-tips": "Custom OAuth client secret (optional)",
+    "hostname": "Hostname",
+    "hostname-tips": "Select pCloud server region",
+    "hostnames": {
+      "eu": "Eu",
+      "us": "Us"
+    },
+    "root_folder_id": "Root folder id",
+    "root_folder_id-tips": "Get folder ID from URL like https://my.pcloud.com/#/filemanager?folder=12345678901 (leave empty for root folder)"
   }
 }

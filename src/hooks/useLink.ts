@@ -1,4 +1,4 @@
-import { objStore, selectedObjs, State, me } from "~/store"
+import { objStore, selectedObjs, State } from "~/store"
 import { Obj } from "~/types"
 import { api, encodePath, pathDir, pathJoin, standardizePath } from "~/utils"
 import { useRouter, useUtil } from "."
@@ -13,7 +13,7 @@ export const getLinkByDirAndObj = (
   encodeAll?: boolean,
 ) => {
   if (type !== "preview") {
-    dir = pathJoin(me().base_path, dir)
+    dir = pathJoin("/", dir)
   }
   dir = standardizePath(dir, true)
   let path = `${dir}/${obj.name}`
