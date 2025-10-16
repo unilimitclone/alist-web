@@ -410,7 +410,20 @@
     "root_folder_path": "Root folder path",
     "secret_access_key": "Secret access key",
     "session_token": "Session token",
-    "sign_url_expire": "Sign url expire"
+    "sign_url_expire": "Sign url expire",
+    "storage_class": "Storage class",
+    "storage_class-tips": "Storage class for new objects. AWS and Tencent COS support different subsets (COS uses ARCHIVE/DEEP_ARCHIVE).",
+    "storage_classs": {
+      "": "",
+      "archive": "Archive",
+      "deep_archive": "Deep archive",
+      "glacier": "Glacier",
+      "glacier_ir": "Glacier ir",
+      "intelligent_tiering": "Intelligent tiering",
+      "onezone_ia": "Onezone ia",
+      "standard": "Standard",
+      "standard_ia": "Standard ia"
+    }
   },
   "Doubao": {
     "cookie": "Cookie",
@@ -825,7 +838,20 @@
     "root_folder_path": "Root folder path",
     "secret_access_key": "Secret access key",
     "session_token": "Session token",
-    "sign_url_expire": "Sign url expire"
+    "sign_url_expire": "Sign url expire",
+    "storage_class": "Storage class",
+    "storage_class-tips": "Storage class for new objects. AWS and Tencent COS support different subsets (COS uses ARCHIVE/DEEP_ARCHIVE).",
+    "storage_classs": {
+      "": "",
+      "archive": "Archive",
+      "deep_archive": "Deep archive",
+      "glacier": "Glacier",
+      "glacier_ir": "Glacier ir",
+      "intelligent_tiering": "Intelligent tiering",
+      "onezone_ia": "Onezone ia",
+      "standard": "Standard",
+      "standard_ia": "Standard ia"
+    }
   },
   "SFTP": {
     "address": "Address",
