@@ -317,6 +317,24 @@
     "root_folder_path": "Root folder path",
     "surl": "Surl"
   },
+  "BitQiu": {
+    "order_desc": "Order desc",
+    "order_type": "Order type",
+    "order_types": {
+      "createTime": "CreateTime",
+      "name": "Name",
+      "size": "Size",
+      "updateTime": "UpdateTime"
+    },
+    "page_size": "Page size",
+    "page_size-tips": "Number of entries to request per page.",
+    "password": "Password",
+    "root_folder_id": "Root folder id",
+    "user_agent": "User agent",
+    "user_platform": "User platform",
+    "user_platform-tips": "Optional device identifier; auto-generated if empty.",
+    "username": "Username"
+  },
   "ChaoXingGroupDrive": {
     "bbsid": "Bbsid",
     "cookie": "Cookie",
@@ -660,6 +678,7 @@
   },
   "MediaTrack": {
     "access_token": "Access token",
+    "device_fingerprint": "Device fingerprint",
     "order_by": "Order by",
     "order_bys": {
       "size": "Size",
@@ -1218,6 +1237,7 @@
     "BaiduNetdisk": {},
     "BaiduPhoto": {},
     "BaiduShare": {},
+    "BitQiu": {},
     "ChaoXingGroupDrive": {},
     "Cloudreve": {},
     "Cloudreve V4": {},
@@ -1305,6 +1325,7 @@
     "BaiduNetdisk": "BaiduNetdisk",
     "BaiduPhoto": "BaiduPhoto",
     "BaiduShare": "BaiduShare",
+    "BitQiu": "BitQiu",
     "ChaoXingGroupDrive": "ChaoXingGroupDrive",
     "Cloudreve": "Cloudreve",
     "Cloudreve V4": "Cloudreve V4",
