@@ -117,6 +117,8 @@
     "cookie-tips": "Fill in the cookie if need captcha",
     "password": "Password",
     "root_folder_id": "Root folder id",
+    "strip_emoji": "Strip emoji",
+    "strip_emoji-tips": "Remove four-byte characters (e.g., emoji) before upload",
     "username": "Username"
   },
   "189CloudPC": {
@@ -137,6 +139,8 @@
     "password": "Password",
     "rapid_upload": "Rapid upload",
     "root_folder_id": "Root folder id",
+    "strip_emoji": "Strip emoji",
+    "strip_emoji-tips": "Remove four-byte characters (e.g., emoji) before upload",
     "type": "Type",
     "types": {
       "family": "Family",
@@ -536,6 +540,20 @@
     "show_readme-tips": "show README、LICENSE file",
     "token": "Token",
     "token-tips": "GitHub token, if you want to access private repositories or increase the rate limit"
+  },
+  "Gitee": {
+    "cookie": "Cookie",
+    "cookie-tips": "Cookie returned from user info request",
+    "download_proxy": "Download proxy",
+    "download_proxy-tips": "Prefix added before download URLs, e.g. https://mirror.example.com/",
+    "endpoint": "Endpoint",
+    "endpoint-tips": "Gitee API endpoint, default https://gitee.com/api/v5",
+    "owner": "Owner",
+    "ref": "Ref",
+    "ref-tips": "Branch, tag or commit SHA, defaults to repository default branch",
+    "repo": "Repo",
+    "root_folder_path": "Root folder path",
+    "token": "Token"
   },
   "Gofile": {
     "api_token": "Api token",
@@ -1251,6 +1269,7 @@
     "FeijiPan": {},
     "GitHub API": {},
     "GitHub Releases": {},
+    "Gitee": {},
     "Gofile": {},
     "GoogleDrive": {},
     "GooglePhoto": {},
@@ -1339,6 +1358,7 @@
     "FeijiPan": "FeijiPan",
     "GitHub API": "GitHub API",
     "GitHub Releases": "GitHub Releases",
+    "Gitee": "Gitee",
     "Gofile": "Gofile",
     "GoogleDrive": "GoogleDrive",
     "GooglePhoto": "GooglePhoto",
