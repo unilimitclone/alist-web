@@ -54,6 +54,13 @@ const previews: Preview[] = [
     prior: true,
   },
   {
+    name: "Doubao Preview",
+    exts: ["pdf"],
+    provider: /^DoubaoNew$/,
+    component: lazy(() => import("./doubao")),
+    prior: true,
+  },
+  {
     name: "Markdown",
     type: ObjType.TEXT,
     component: lazy(() => import("./markdown")),
