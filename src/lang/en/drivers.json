@@ -459,6 +459,17 @@
     "root_folder_id": "Root folder id",
     "upload_thread": "Upload thread"
   },
+  "DoubaoNew": {
+    "authorization": "Authorization",
+    "authorization-tips": "DPoP access token (Authorization header value); optional if present in cookie",
+    "cookie": "Cookie",
+    "cookie-tips": "Optional cookie; only used to extract authorization/dpop tokens",
+    "debug": "Debug",
+    "debug-tips": "Enable debug logs for upload",
+    "dpop": "Dpop",
+    "dpop-tips": "DPoP header value; optional if present in cookie",
+    "root_folder_id": "Root folder id"
+  },
   "DoubaoShare": {
     "cookie": "Cookie",
     "root_folder_path": "Root folder path",
@@ -1264,6 +1275,7 @@
     "Crypt": {},
     "Doge": {},
     "Doubao": {},
+    "DoubaoNew": {},
     "DoubaoShare": {},
     "Dropbox": {},
     "FTP": {},
@@ -1353,6 +1365,7 @@
     "Crypt": "Crypt",
     "Doge": "Doge",
     "Doubao": "Doubao",
+    "DoubaoNew": "DoubaoNew",
     "DoubaoShare": "DoubaoShare",
     "Dropbox": "Dropbox",
     "FTP": "FTP",
