@@ -491,6 +491,21 @@
     "root_folder_path": "Root folder path",
     "username": "Username"
   },
+  "FTPS": {
+    "address": "Address",
+    "encoding": "Encoding",
+    "password": "Password",
+    "root_folder_path": "Root folder path",
+    "tls_insecure_skip_verify": "Tls insecure skip verify",
+    "tls_insecure_skip_verify-tips": "Allow insecure TLS connections (e.g. self-signed certificates)",
+    "tls_mode": "Tls mode",
+    "tls_mode-tips": "Explicit: STARTTLS on port 21; Implicit: direct TLS on port 990",
+    "tls_modes": {
+      "Explicit": "Explicit",
+      "Implicit": "Implicit"
+    },
+    "username": "Username"
+  },
   "FebBox": {
     "client_id": "Client id",
     "client_secret": "Client secret",
@@ -1278,6 +1293,7 @@
     "DoubaoShare": {},
     "Dropbox": {},
     "FTP": {},
+    "FTPS": {},
     "FebBox": {},
     "FeijiPan": {},
     "GitHub API": {},
@@ -1368,6 +1384,7 @@
     "DoubaoShare": "DoubaoShare",
     "Dropbox": "Dropbox",
     "FTP": "FTP",
+    "FTPS": "FTPS",
     "FebBox": "FebBox",
     "FeijiPan": "FeijiPan",
     "GitHub API": "GitHub API",
