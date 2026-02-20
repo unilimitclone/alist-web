@@ -15,6 +15,8 @@ import { r } from "."
 import { me } from "~/store"
 import { joinBase, pathJoin } from "~/utils"
 
+const DEFAULT_PAGE_SIZE = 50
+
 export const fsGet = (
   path: string = "/",
   password = "",
@@ -35,7 +37,7 @@ export const fsList = (
   path: string = "/",
   password = "",
   page = 1,
-  per_page = 0,
+  per_page = DEFAULT_PAGE_SIZE,
   refresh = false,
   cancelToken?: CancelToken,
 ): Promise<FsListResp> => {
