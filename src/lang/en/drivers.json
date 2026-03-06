@@ -943,6 +943,28 @@
     "token": "Token",
     "username": "Username"
   },
+  "Streamtape": {
+    "api_key": "Api key",
+    "api_key-tips": "API Key from Streamtape account settings",
+    "api_login": "Api login",
+    "api_login-tips": "API Login from Streamtape account settings",
+    "enable_range_control": "Enable range control",
+    "enable_range_control-tips": "Enable driver-level range shaping for smoother streaming",
+    "range_chunk_mb": "Range chunk mb",
+    "range_chunk_mb-tips": "Chunk mode part size in MB",
+    "range_concurrency": "Range concurrency",
+    "range_concurrency-tips": "Chunk mode concurrent upstream requests",
+    "range_mode": "Range mode",
+    "range_mode-tips": "Range strategy for preview: chunk=bounded ranges, full=single full-tail range, percent=part size by file percentage",
+    "range_modes": {
+      "chunk": "Chunk",
+      "full": "Full",
+      "percent": "Percent"
+    },
+    "range_percent": "Range percent",
+    "range_percent-tips": "Percent mode part size percentage (1-100)",
+    "root_folder_id": "Root folder id"
+  },
   "Teambition": {
     "cookie": "Cookie",
     "order_by": "Order by",
@@ -1331,6 +1353,7 @@
     "SFTP": {},
     "SMB": {},
     "Seafile": {},
+    "Streamtape": {},
     "Teambition": {},
     "Terabox": {},
     "Thunder": {},
@@ -1420,6 +1443,7 @@
     "SFTP": "SFTP",
     "SMB": "SMB",
     "Seafile": "Seafile",
+    "Streamtape": "Streamtape",
     "Teambition": "Teambition",
     "Terabox": "Terabox",
     "Thunder": "Thunder",
