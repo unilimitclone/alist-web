@@ -698,8 +698,12 @@
     "thumb_cache_folder": "Thumb cache folder",
     "thumb_concurrency": "Thumb concurrency",
     "thumb_concurrency-tips": "Number of concurrent thumbnail generation goroutines. This controls how many thumbnails can be generated in parallel.",
+    "thumb_pixel": "Thumb pixel",
+    "thumb_pixel-tips": "Specifies the target width for image thumbnails in pixels. The height of the thumbnail will be calculated automatically to maintain the original aspect ratio of the image.",
     "thumbnail": "Thumbnail",
     "thumbnail-tips": "enable thumbnail",
+    "use_ffmpeg": "Use ffmpeg",
+    "use_ffmpeg-tips": "use ffmpeg to generate thumbnail",
     "video_thumb_pos": "Video thumb pos",
     "video_thumb_pos-tips": "The position of the video thumbnail. If the value is a number (integer ot floating point), it represents the time in seconds. If the value ends with '%', it represents the percentage of the video duration."
   },
@@ -852,6 +856,7 @@
   },
   "Quark": {
     "cookie": "Cookie",
+    "only_list_video_file": "Only list video file",
     "order_by": "Order by",
     "order_bys": {
       "file_name": "File name",
@@ -864,7 +869,9 @@
       "asc": "Asc",
       "desc": "Desc"
     },
-    "root_folder_id": "Root folder id"
+    "root_folder_id": "Root folder id",
+    "use_transcoding_address": "Use transcoding address",
+    "use_transcoding_address-tips": "You can watch the transcoded video and support 302 redirection"
   },
   "QuarkTV": {
     "device_id": "Device id",
@@ -964,6 +971,38 @@
     "range_percent": "Range percent",
     "range_percent-tips": "Percent mode part size percentage (1-100)",
     "root_folder_id": "Root folder id"
+  },
+  "Strm": {
+    "PathPrefix": "PathPrefix",
+    "PathPrefix-tips": "Path prefix in strm content",
+    "RotateSignNow": "RotateSignNow",
+    "RotateSignNow-tips": "Set true and save to rotate signs now (rewrite local STRM), then auto reset to false",
+    "SaveLocalMode": "SaveLocalMode",
+    "SaveLocalMode-tips": "Local save mode",
+    "SaveLocalModes": {
+      "insert": "Insert",
+      "sync": "Sync",
+      "update": "Update"
+    },
+    "SaveStrmLocalPath": "SaveStrmLocalPath",
+    "SaveStrmLocalPath-tips": "Local path for generated files",
+    "SaveStrmToLocal": "SaveStrmToLocal",
+    "SaveStrmToLocal-tips": "Save generated files to local disk",
+    "SignExpireHours": "SignExpireHours",
+    "SignExpireHours-tips": "Driver-level sign expiration in hours. 0 uses global link_expiration",
+    "downloadFileTypes": "DownloadFileTypes",
+    "downloadFileTypes-tips": "Extensions to download as local files",
+    "encodePath": "EncodePath",
+    "encodePath-tips": "Encode path in strm content",
+    "filterFileTypes": "FilterFileTypes",
+    "filterFileTypes-tips": "Extensions to expose as .strm",
+    "paths": "Paths",
+    "siteUrl": "SiteUrl",
+    "siteUrl-tips": "The prefix URL of generated strm file",
+    "withSign": "WithSign",
+    "withSign-tips": "Append sign query to generated URL",
+    "withoutUrl": "WithoutUrl",
+    "withoutUrl-tips": "Generate path-only strm content"
   },
   "Teambition": {
     "cookie": "Cookie",
@@ -1155,6 +1194,7 @@
   },
   "UC": {
     "cookie": "Cookie",
+    "only_list_video_file": "Only list video file",
     "order_by": "Order by",
     "order_bys": {
       "file_name": "File name",
@@ -1167,7 +1207,9 @@
       "asc": "Asc",
       "desc": "Desc"
     },
-    "root_folder_id": "Root folder id"
+    "root_folder_id": "Root folder id",
+    "use_transcoding_address": "Use transcoding address",
+    "use_transcoding_address-tips": "You can watch the transcoded video and support 302 redirection"
   },
   "UCTV": {
     "device_id": "Device id",
@@ -1354,6 +1396,7 @@
     "SMB": {},
     "Seafile": {},
     "Streamtape": {},
+    "Strm": {},
     "Teambition": {},
     "Terabox": {},
     "Thunder": {},
@@ -1444,6 +1487,7 @@
     "SMB": "SMB",
     "Seafile": "Seafile",
     "Streamtape": "Streamtape",
+    "Strm": "Strm",
     "Teambition": "Teambition",
     "Terabox": "Terabox",
     "Thunder": "Thunder",
