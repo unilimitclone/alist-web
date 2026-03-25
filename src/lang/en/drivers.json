@@ -447,7 +447,9 @@
       "onezone_ia": "Onezone ia",
       "standard": "Standard",
       "standard_ia": "Standard ia"
-    }
+    },
+    "use_placeholder": "Use placeholder",
+    "use_placeholder-tips": "Create hidden placeholder file (for example .alist) to keep empty folders."
   },
   "Doubao": {
     "cookie": "Cookie",
@@ -923,7 +925,9 @@
       "onezone_ia": "Onezone ia",
       "standard": "Standard",
       "standard_ia": "Standard ia"
-    }
+    },
+    "use_placeholder": "Use placeholder",
+    "use_placeholder-tips": "Create hidden placeholder file (for example .alist) to keep empty folders."
   },
   "SFTP": {
     "address": "Address",
