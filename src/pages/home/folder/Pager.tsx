@@ -39,7 +39,7 @@ const Pagination = () => {
   return (
     <HStack spacing="$2" flexWrap="wrap" justifyContent="center">
       <HStack spacing="$1">
-        <Text size="sm">Per page</Text>
+        {/*<Text size="sm">Per page</Text>*/}
         <Select
           size="sm"
           defaultValue={currentPerPage()}

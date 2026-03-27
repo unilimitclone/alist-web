@@ -255,13 +255,30 @@ export const offlineDownload = (
 
 export const createShare = (payload: {
   path: string
+  share_id?: string
   name?: string
   password?: string
+  expire_at?: string
   expire_hours?: number
+  access_limit?: number
+  burn_after_read?: boolean
   allow_preview?: boolean
   allow_download?: boolean
 }): PResp<ShareItem> => {
   return r.post("/share/create", payload)
+}
+
+export const updateShare = (payload: {
+  share_id: string
+  new_share_id?: string
+  name?: string
+  password?: string
+  expire_at?: string
+  access_limit?: number
+  allow_preview?: boolean
+  allow_download?: boolean
+}): PResp<ShareItem> => {
+  return r.post("/share/update", payload)
 }
 
 export const getShareList = (
@@ -278,6 +295,10 @@ export const getShareList = (
 
 export const deleteShare = (share_id: string): PEmptyResp => {
   return r.post("/share/delete", { share_id })
+}
+
+export const disableShare = (share_id: string): PEmptyResp => {
+  return r.post("/share/disable", { share_id })
 }
 
 export const getPublicShareInfo = (

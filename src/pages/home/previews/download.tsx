@@ -22,6 +22,7 @@ export const Download = (props: { openWith?: boolean }) => {
   const t = useT()
   const { pathname } = useRouter()
   const { copyCurrentRawLink } = useCopyLink()
+  const isShareRoute = () => pathname().startsWith("/s/")
   const [qrUrl, setQrUrl] = createSignal("")
   QRCode.toDataURL(objStore.raw_url, {
     type: "image/jpeg",
@@ -35,17 +36,19 @@ export const Download = (props: { openWith?: boolean }) => {
         <Button colorScheme="accent" onClick={() => copyCurrentRawLink(true)}>
           {t("home.toolbar.copy_link")}
         </Button>
-        <Button
-          onClick={() =>
-            bus.emit("share", {
-              path: pathname(),
-              name: objStore.obj.name,
-              is_dir: false,
-            })
-          }
-        >
-          {t("home.toolbar.share", undefined, "Share")}
-        </Button>
+        <Show when={!isShareRoute()}>
+          <Button
+            onClick={() =>
+              bus.emit("share", {
+                path: pathname(),
+                name: objStore.obj.name,
+                is_dir: false,
+              })
+            }
+          >
+            {t("home.toolbar.share", undefined, "Share")}
+          </Button>
+        </Show>
         <Button as="a" href={objStore.raw_url} target="_blank">
           {t("home.preview.download")}
         </Button>

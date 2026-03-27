@@ -4,12 +4,15 @@ import { useT } from "~/hooks"
 import {
   allChecked,
   checkboxOpen,
+  getCurrentPath,
   isIndeterminate,
+  me,
   objStore,
   selectAll,
   sortObjs,
 } from "~/store"
 import { OrderBy } from "~/store"
+import { UserMethods, UserPermissions } from "~/types"
 import { Col, cols, ListItem } from "./ListItem"
 import { ItemCheckbox, useSelectWithMouse } from "./helper"
 import { bus } from "~/utils"
