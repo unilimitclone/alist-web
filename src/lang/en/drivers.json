@@ -323,6 +323,31 @@
     "root_folder_path": "Root folder path",
     "surl": "Surl"
   },
+  "BaiduYouth": {
+    "cookie": "Cookie",
+    "download_api": "Download api",
+    "download_apis": {
+      "crack": "Crack",
+      "official": "Official"
+    },
+    "force_proxy": "Force proxy",
+    "force_proxy-tips": "Proxy downloads through AList. Disable to redirect the browser to a fresh Baidu direct link.",
+    "order_by": "Order by",
+    "order_bys": {
+      "name": "Name",
+      "size": "Size",
+      "time": "Time"
+    },
+    "order_direction": "Order direction",
+    "order_directions": {
+      "asc": "Asc",
+      "desc": "Desc"
+    },
+    "root_folder_path": "Root folder path",
+    "upload_api": "Upload api",
+    "upload_thread": "Upload thread",
+    "upload_thread-tips": "1\u003c=thread\u003c=32"
+  },
   "BitQiu": {
     "order_desc": "Order desc",
     "order_type": "Order type",
@@ -477,7 +502,9 @@
       "onezone_ia": "Onezone ia",
       "standard": "Standard",
       "standard_ia": "Standard ia"
-    }
+    },
+    "use_placeholder": "Use placeholder",
+    "use_placeholder-tips": "Create hidden placeholder file (for example .alist) to keep empty folders."
   },
   "Doubao": {
     "cookie": "Cookie",
@@ -955,7 +982,9 @@
       "onezone_ia": "Onezone ia",
       "standard": "Standard",
       "standard_ia": "Standard ia"
-    }
+    },
+    "use_placeholder": "Use placeholder",
+    "use_placeholder-tips": "Create hidden placeholder file (for example .alist) to keep empty folders."
   },
   "SFTP": {
     "address": "Address",
@@ -1387,6 +1416,7 @@
     "BaiduNetdisk": {},
     "BaiduPhoto": {},
     "BaiduShare": {},
+    "BaiduYouth": {},
     "BitQiu": {},
     "ChaoXingGroupDrive": {},
     "Cloudreve": {},
@@ -1481,6 +1511,7 @@
     "BaiduNetdisk": "BaiduNetdisk",
     "BaiduPhoto": "BaiduPhoto",
     "BaiduShare": "BaiduShare",
+    "BaiduYouth": "BaiduYouth",
     "BitQiu": "BitQiu",
     "ChaoXingGroupDrive": "ChaoXingGroupDrive",
     "Cloudreve": "Cloudreve",
