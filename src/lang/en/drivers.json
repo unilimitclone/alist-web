@@ -406,34 +406,6 @@
     "root_folder_path": "Root folder path",
     "username": "Username"
   },
-  "Chunker": {
-    "chunk_size": "Chunk size",
-    "chunk_size-tips": "Files larger than this will be split into chunks. Input in MB; it will be stored in bytes.",
-    "hash_type": "Hash type",
-    "hash_types": {
-      "md5": "MD5",
-      "none": "None",
-      "sha1": "SHA1"
-    },
-    "meta_format": "Metadata format",
-    "meta_formats": {
-      "none": "None",
-      "simplejson": "Simple JSON"
-    },
-    "name_format": "Name format",
-    "name_format-tips": "Magic tokens: {name} = original file name, {chunk} = chunk number, {chunk:N} = zero-padded chunk number. The name token must appear before the chunk token. Examples: {name}.part{chunk:3}, chunk-{name}-{chunk}, {name}.rclone_chunk.{chunk:3}",
-    "remote_path": "Remote path",
-    "remote_path-tips": "Primary AList mounted folder path used to store metadata and small files, e.g. /my-storage/chunks",
-    "remote_paths": "Extra remote paths",
-    "remote_paths-tips": "Additional AList mounted folder paths, one per line. Chunk files will be distributed across remote_path and these extra paths.",
-    "store_chunks_in_primary": "Store chunks in primary path",
-    "store_chunks_in_primary-tips": "When extra remote paths are configured, also store chunk files in remote_path.",
-    "store_chunks_in_primary-empty_hint": "No extra remote paths are configured yet, so this switch currently has no effect.",
-    "store_chunks_in_primary-enabled_hint": "Primary path will store metadata, small files, and part of the chunk files.",
-    "store_chunks_in_primary-disabled_hint": "Primary path will only store metadata and small files. Chunk files will be placed only in the extra remote paths.",
-    "start_from": "Start from",
-    "start_from-tips": "Chunk number base, usually 0 or 1"
-  },
   "Crypt": {
     "directory_name_encryption": "Directory name encryption",
     "directory_name_encryptions": {
@@ -458,7 +430,7 @@
     "password": "Password",
     "password-tips": "the main password",
     "remote_path": "Remote path",
-    "remote_path-tips": "AList mounted folder path used to store encrypted data, e.g. /my-storage/secret",
+    "remote_path-tips": "This is where the encrypted data stores",
     "salt": "Salt",
     "salt-tips": "If you don't know what is salt, treat it as a second password. Optional but recommended",
     "show_hidden": "Show hidden",
@@ -481,8 +453,6 @@
       "v2": "V2"
     },
     "placeholder": "Placeholder",
-    "use_placeholder": "Use placeholder file",
-    "use_placeholder-tips": "When enabled, create a hidden placeholder (such as .alist) to keep empty folders.",
     "region": "Region",
     "remove_bucket": "Remove bucket",
     "remove_bucket-tips": "Remove bucket name from path when using custom host.",
@@ -961,8 +931,6 @@
       "v2": "V2"
     },
     "placeholder": "Placeholder",
-    "use_placeholder": "Use placeholder file",
-    "use_placeholder-tips": "When enabled, create a hidden placeholder (such as .alist) to keep empty folders.",
     "region": "Region",
     "remove_bucket": "Remove bucket",
     "remove_bucket-tips": "Remove bucket name from path when using custom host.",
@@ -1031,7 +999,9 @@
     },
     "range_percent": "Range percent",
     "range_percent-tips": "Percent mode part size percentage (1-100)",
-    "root_folder_id": "Root folder id"
+    "root_folder_id": "Root folder id",
+    "sha256": "Sha256",
+    "sha256-tips": "Expected SHA256 hash for upload verification (optional)"
   },
   "Strm": {
     "PathPrefix": "PathPrefix",
@@ -1466,7 +1436,9 @@
     "SFTP": {},
     "SMB": {},
     "Seafile": {},
-    "Streamtape": {},
+    "Streamtape": {
+      "alert": "Moving files to root folder is not supported by Streamtape API"
+    },
     "Strm": {},
     "Teambition": {},
     "Terabox": {},
@@ -1516,7 +1488,6 @@
     "ChaoXingGroupDrive": "ChaoXingGroupDrive",
     "Cloudreve": "Cloudreve",
     "Cloudreve V4": "Cloudreve V4",
-    "Chunker": "Chunker",
     "Crypt": "Crypt",
     "Doge": "Doge",
     "Doubao": "Doubao",
