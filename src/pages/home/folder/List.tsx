@@ -5,10 +5,12 @@ import {
   allChecked,
   checkboxOpen,
   getCurrentPath,
+  getSortPreference,
   isIndeterminate,
   me,
   objStore,
   selectAll,
+  setSortPreference,
   sortObjs,
 } from "~/store"
 import { OrderBy } from "~/store"
@@ -25,8 +27,18 @@ export const ListTitle = (props: {
   const [orderBy, setOrderBy] = createSignal<OrderBy>()
   const [reverse, setReverse] = createSignal(false)
   createEffect(() => {
+    const preference = getSortPreference(getCurrentPath())
+    batch(() => {
+      setOrderBy(preference?.orderBy)
+      setReverse(preference?.reverse ?? false)
+    })
+  })
+  createEffect(() => {
     if (orderBy()) {
-      props.sortCallback(orderBy()!, reverse())
+      const currentOrderBy = orderBy()!
+      const currentReverse = reverse()
+      props.sortCallback(currentOrderBy, currentReverse)
+      setSortPreference(currentOrderBy, currentReverse, getCurrentPath())
     }
   })
   const itemProps = (col: Col) => {
