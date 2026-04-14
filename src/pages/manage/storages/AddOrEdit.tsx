@@ -89,10 +89,21 @@ const AddOrEdit = () => {
     return r.post(`/admin/storage/${id ? "update" : "create"}`, storage)
   })
   const alert = createMemo(() => {
-    const i = drivers()[storage.driver]?.config.alert
-    console.log(i)
-    if (i) {
-      return i.split("|")[0]
+    const raw = drivers()[storage.driver]?.config.alert?.trim()
+    if (!raw) return
+
+    const [maybeStatus, ...messageParts] = raw.split("|")
+    const status = ["info", "success", "warning", "danger"].includes(
+      maybeStatus,
+    )
+      ? maybeStatus
+      : "info"
+    const fallbackText =
+      messageParts.length > 0 ? messageParts.join("|").trim() : raw
+
+    return {
+      status,
+      fallbackText,
     }
   })
   return (
@@ -138,9 +149,13 @@ const AddOrEdit = () => {
           }}
         />
         <Show when={alert()}>
-          <Alert status={alert() as any} w="$full">
+          <Alert status={alert()!.status as any} w="$full">
             <AlertIcon />
-            {t(`drivers.config.${storage.driver}.alert`)}
+            {t(
+              `drivers.config.${storage.driver}.alert`,
+              undefined,
+              alert()!.fallbackText,
+            )}
           </Alert>
         </Show>
       </VStack>
