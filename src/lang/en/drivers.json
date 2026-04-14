@@ -157,6 +157,36 @@
     "username": "Username",
     "validate_code": "Validate code"
   },
+  "360AIYunPan": {
+    "api_key": "Api key",
+    "api_key-tips": "360 AI YunPan API key; used when auth_type=api_key",
+    "auth_type": "Auth type",
+    "auth_types": {
+      "api_key": "Api key",
+      "cookie": "Cookie"
+    },
+    "cookie": "Cookie",
+    "cookie-tips": "Cookie copied from a logged-in yunpan.com session; used when auth_type=cookie",
+    "download_token": "Download token",
+    "download_token-tips": "Optional web token for cookie-mode download; leave empty to auto-detect",
+    "ecs_env": "Ecs env",
+    "ecs_envs": {
+      "hgtest": "Hgtest",
+      "prod": "Prod",
+      "test": "Test"
+    },
+    "order_direction": "Order direction",
+    "order_directions": {
+      "asc": "Asc",
+      "desc": "Desc"
+    },
+    "owner_qid": "Owner qid",
+    "owner_qid-tips": "Optional owner_qid for cookie-mode download; leave empty to auto-detect",
+    "page_size": "Page size",
+    "page_size-tips": "List page size",
+    "root_folder_path": "Root folder path",
+    "sub_channel": "Sub channel"
+  },
   "AList V2": {
     "access_token": "Access token",
     "password": "Password",
@@ -373,6 +403,33 @@
     "root_folder_id": "Root folder id",
     "user_name": "User name"
   },
+  "Chunker": {
+    "chunk_size": "Chunk size",
+    "chunk_size-tips": "Files larger than this will be split into chunks",
+    "hash_type": "Hash type",
+    "hash_type-tips": "Hash stored in metadata for chunked files",
+    "hash_types": {
+      "md5": "Md5",
+      "none": "None",
+      "sha1": "Sha1"
+    },
+    "meta_format": "Meta format",
+    "meta_format-tips": "simplejson is compatible with rclone chunker metadata",
+    "meta_formats": {
+      "none": "None",
+      "simplejson": "Simplejson"
+    },
+    "name_format": "Name format",
+    "name_format-tips": "Magic tokens: {name}, {chunk}, {chunk:N}. Name token must appear before chunk token.",
+    "remote_path": "Remote path",
+    "remote_path-tips": "Primary AList mounted folder path used to store metadata and small files, e.g. /my-storage/chunks",
+    "remote_paths": "Remote paths",
+    "remote_paths-tips": "Additional AList mounted folder paths, one per line. Chunk files will be distributed across remote_path and these extra paths.",
+    "start_from": "Start from",
+    "start_from-tips": "Chunk number base, usually 0 or 1",
+    "store_chunks_in_primary": "Store chunks in primary",
+    "store_chunks_in_primary-tips": "When extra remote paths are configured, also store chunk files in remote_path"
+  },
   "Cloudreve": {
     "address": "Address",
     "cookie": "Cookie",
@@ -430,13 +487,18 @@
     "password": "Password",
     "password-tips": "the main password",
     "remote_path": "Remote path",
-    "remote_path-tips": "This is where the encrypted data stores",
+    "remote_path-tips": "AList mounted folder path used to store encrypted data, e.g. /my-storage/secret",
     "salt": "Salt",
     "salt-tips": "If you don't know what is salt, treat it as a second password. Optional but recommended",
     "show_hidden": "Show hidden",
     "show_hidden-tips": "show hidden directories and files",
     "thumbnail": "Thumbnail",
     "thumbnail-tips": "enable thumbnail which pre-generated under .thumbnails folder"
+  },
+  "Darkibox": {
+    "api_key": "Api key",
+    "api_key-tips": "API key from your Darkibox account",
+    "root_folder_id": "Root folder id"
   },
   "Doge": {
     "access_key_id": "Access key id",
@@ -1374,6 +1436,9 @@
       "alert": "You can try to use 189PC driver if this driver does not work."
     },
     "189CloudPC": {},
+    "360AIYunPan": {
+      "alert": "api_key mode supports list/link/upload/mkdir/rename/move/delete; cookie mode supports list/link/mkdir/rename/move/delete only, and forces web proxy because direct download URLs require web headers."
+    },
     "AList V2": {},
     "AList V3": {},
     "Alias": {},
@@ -1389,9 +1454,11 @@
     "BaiduYouth": {},
     "BitQiu": {},
     "ChaoXingGroupDrive": {},
+    "Chunker": {},
     "Cloudreve": {},
     "Cloudreve V4": {},
     "Crypt": {},
+    "Darkibox": {},
     "Doge": {},
     "Doubao": {},
     "DoubaoNew": {},
@@ -1473,6 +1540,7 @@
     "139Yun": "139Yun",
     "189Cloud": "189Cloud",
     "189CloudPC": "189CloudPC",
+    "360AIYunPan": "360AIYunPan",
     "AList V2": "AList V2",
     "AList V3": "AList V3",
     "Alias": "Alias",
@@ -1486,9 +1554,11 @@
     "BaiduYouth": "BaiduYouth",
     "BitQiu": "BitQiu",
     "ChaoXingGroupDrive": "ChaoXingGroupDrive",
+    "Chunker": "Chunker",
     "Cloudreve": "Cloudreve",
     "Cloudreve V4": "Cloudreve V4",
     "Crypt": "Crypt",
+    "Darkibox": "Darkibox",
     "Doge": "Doge",
     "Doubao": "Doubao",
     "DoubaoNew": "DoubaoNew",
