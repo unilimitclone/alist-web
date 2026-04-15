@@ -17,5 +17,14 @@
   "pikpak": "PikPak",
   "set_pikpak": "Set PikPak",
   "thunder": "Thunder",
-  "set_thunder": "Set Thunder"
+  "set_thunder": "Set Thunder",
+  "frp": "FRP Intranet Tunnel",
+  "frp_save_apply": "Save & Apply",
+  "frp_stop": "Stop FRP",
+  "frp_status_label": "Connection Status:",
+  "frp_apply_success": "FRP client restarted",
+  "frp_stop_success": "FRP client stopped",
+  "frp_refresh_status": "Refresh",
+  "frp_logs": "FRP Runtime Logs",
+  "frp_logs_empty": "No FRP runtime logs yet"
 }
