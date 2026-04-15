@@ -136,5 +136,18 @@
   "version": "Version",
   "video_autoplay": "Video autoplay",
   "video_types": "Video types",
-  "webauthn_login_enabled": "Webauthn login enabled"
+  "webauthn_login_enabled": "Webauthn login enabled",
+  "frp_enabled": "Enable FRP",
+  "frp_server_addr": "Server address",
+  "frp_server_port": "Server port",
+  "frp_auth_token": "Auth token",
+  "frp_proxy_name": "Proxy name",
+  "frp_proxy_type": "Proxy type",
+  "frp_custom_domain": "Custom domain",
+  "frp_subdomain": "Subdomain",
+  "frp_remote_port": "Remote port",
+  "frp_local_port": "Local port",
+  "frp_tls_enable": "Enable TLS",
+  "frp_stcp_secret_key": "STCP secret key",
+  "frp_status": "Status"
 }

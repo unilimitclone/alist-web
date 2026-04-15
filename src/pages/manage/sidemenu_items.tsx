@@ -116,6 +116,12 @@ export const side_menu_items: SideMenuItem[] = [
         component: () => <CommonSettings group={Group.FTP} />,
       },
       {
+        title: "manage.sidemenu.frp",
+        icon: BsHddNetwork,
+        to: "/@manage/settings/frp",
+        component: lazy(() => import("./settings/Frp")),
+      },
+      {
         title: "manage.sidemenu.traffic",
         icon: BsArrowLeftRight,
         to: "/@manage/settings/traffic",

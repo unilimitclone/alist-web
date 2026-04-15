@@ -37,7 +37,8 @@
     "s3": "S3",
     "tag": "Tag",
     "ftp": "FTP",
-    "traffic": "Traffic"
+    "traffic": "Traffic",
+    "frp": "FRP Tunnel"
   },
   "title": "AList Manage",
   "not_admin": "You are not admin user, please login with admin account.",
