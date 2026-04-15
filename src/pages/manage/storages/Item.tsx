@@ -67,6 +67,11 @@ const Item = (props: ItemProps) => {
     props.type === Type.Text &&
     props.driver === "Chunker" &&
     props.name === "remote_paths"
+  const isStrmPathsField =
+    props.type === Type.Text &&
+    props.driver === "Strm" &&
+    props.name === "paths"
+  const isPathSelectionTextField = isChunkerRemotePathsField || isStrmPathsField
   const isChunkerStoreChunksInPrimaryField =
     props.type === Type.Bool &&
     props.driver === "Chunker" &&
@@ -88,14 +93,14 @@ const Item = (props: ItemProps) => {
       ? t("drivers.Chunker.store_chunks_in_primary-enabled_hint")
       : t("drivers.Chunker.store_chunks_in_primary-disabled_hint")
   }
-  const chunkerRemotePathEntries = () => {
-    if (!isChunkerRemotePathsField) {
+  const pathSelectionEntries = () => {
+    if (!isPathSelectionTextField) {
       return []
     }
     const value = (props.value as string) ?? ""
     return value === "" ? [""] : value.split("\n")
   }
-  const updateChunkerRemotePaths = (entries: string[]) => {
+  const updatePathSelectionEntries = (entries: string[]) => {
     if (props.type !== Type.Text) {
       return
     }
@@ -204,7 +209,7 @@ const Item = (props: ItemProps) => {
         </Match>
         <Match when={props.type === Type.Text}>
           <Show
-            when={isChunkerRemotePathsField}
+            when={isPathSelectionTextField}
             fallback={
               <Textarea
                 id={props.name}
@@ -219,25 +224,25 @@ const Item = (props: ItemProps) => {
             }
           >
             <VStack w="$full" alignItems="stretch" spacing="$2">
-              <For each={chunkerRemotePathEntries()}>
+              <For each={pathSelectionEntries()}>
                 {(entry, index) => (
                   <HStack w="$full" alignItems="flex-start" spacing="$2">
                     <FolderChooseInput
                       id={index() === 0 ? props.name : undefined}
                       value={entry}
                       onChange={(value) => {
-                        const next = [...chunkerRemotePathEntries()]
+                        const next = [...pathSelectionEntries()]
                         next[index()] = value
-                        updateChunkerRemotePaths(next)
+                        updatePathSelectionEntries(next)
                       }}
                     />
                     <Button
                       colorScheme="danger"
                       variant="subtle"
                       onClick={() => {
-                        const next = [...chunkerRemotePathEntries()]
+                        const next = [...pathSelectionEntries()]
                         next.splice(index(), 1)
-                        updateChunkerRemotePaths(next)
+                        updatePathSelectionEntries(next)
                       }}
                       disabled={props.readonly}
                     >
@@ -249,7 +254,7 @@ const Item = (props: ItemProps) => {
               <Button
                 variant="subtle"
                 onClick={() => {
-                  updateChunkerRemotePaths([...chunkerRemotePathEntries(), ""])
+                  updatePathSelectionEntries([...pathSelectionEntries(), ""])
                 }}
                 disabled={props.readonly}
               >
