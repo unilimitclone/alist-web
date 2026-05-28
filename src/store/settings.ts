@@ -6,6 +6,8 @@ export const DEFAULT_PAGE_SIZE = 200
 export const MAX_PAGE_SIZE = 500
 
 export const setSettings = (items: Record<string, string>) => {
+  previewSettingsCache = undefined
+  previewsRecord = {}
   Object.keys(items).forEach((key) => {
     settings[key] = items[key]
   })
@@ -118,4 +120,33 @@ export const getHideFiles = () => {
       })
   }
   return hideFiles
+}
+
+export interface PreviewOverride {
+  order?: string[]
+  disabled?: string[]
+}
+export type PreviewSettingsMap = Record<string, PreviewOverride>
+
+let previewSettingsCache: PreviewSettingsMap | undefined
+
+export const getPreviewSettings = (): PreviewSettingsMap => {
+  if (previewSettingsCache !== undefined) return previewSettingsCache
+  const raw = getSetting("preview_settings")
+  if (!raw) {
+    previewSettingsCache = {}
+    return previewSettingsCache
+  }
+  try {
+    const parsed = JSON.parse(raw)
+    previewSettingsCache = parsed && typeof parsed === "object" ? parsed : {}
+  } catch (e) {
+    console.error("failed parse preview_settings, use default", e)
+    previewSettingsCache = {}
+  }
+  return previewSettingsCache!
+}
+
+export const invalidatePreviewSettings = () => {
+  previewSettingsCache = undefined
 }
