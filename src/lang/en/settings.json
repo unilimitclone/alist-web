@@ -1,5 +1,4 @@
 {
-  "115_temp_dir": "115 temp dir",
   "allow_indexed": "Allow indexed",
   "allow_mounted": "Allow mounted",
   "allow_register": "Allow register",
@@ -57,7 +56,6 @@
   "ftp_public_host": "Ftp public host",
   "ftp_tls_private_key_path": "Ftp tls private key path",
   "ftp_tls_public_cert_path": "Ftp tls public cert path",
-  "guangyapan_temp_dir": "GuangYaPan temp dir",
   "hide_files": "Hide files",
   "home_container": "Home container",
   "home_containers": {
@@ -90,7 +88,7 @@
   "max_index_depth-tips": "max depth of index",
   "max_server_download_speed": "Max server download speed",
   "max_server_upload_speed": "Max server upload speed",
-  "meta_not_found_cache_expire": "Missing meta cache expiration",
+  "meta_not_found_cache_expire": "Meta not found cache expire",
   "meta_not_found_cache_expire-tips": "Negative cache expiration for missing meta records, in seconds. Set 0 to disable.",
   "ocr_api": "Ocr api",
   "offline_download_task_threads_num": "Offline download task threads num",
@@ -103,7 +101,6 @@
     "load_more": "Load more",
     "pagination": "Pagination"
   },
-  "pikpak_temp_dir": "PikPak temp dir",
   "preview_archives_by_default": "Preview archives by default",
   "preview_settings": "Preview settings",
   "privacy_regs": "Privacy regs",
@@ -156,7 +153,6 @@
   "text_types": "Text types",
   "thumbnail_size": "Thumbnail size",
   "thumbnail_size-tips": "Thumbnail width in pixels. Height is scaled proportionally.",
-  "thunder_temp_dir": "Thunder temp dir",
   "token": "Token",
   "transmission_seedtime": "Transmission seedtime",
   "transmission_uri": "Transmission uri",
