@@ -70,6 +70,12 @@ export const side_menu_items: SideMenuItem[] = [
         component: () => <CommonSettings group={Group.PREVIEW} />,
       },
       {
+        title: "manage.sidemenu.preview-settings",
+        icon: BsCameraFill,
+        to: "/@manage/settings/preview-settings",
+        component: lazy(() => import("./preview-settings")),
+      },
+      {
         title: "manage.sidemenu.global",
         icon: BsJoystick,
         to: "/@manage/settings/global",
