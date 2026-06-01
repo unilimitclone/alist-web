@@ -224,12 +224,8 @@ export const ContextMenu = () => {
         <Show when={oneChecked()}>
           <Item
             onClick={({ props }) => {
-              const targetPath =
-                props.path && props.path.startsWith("/")
-                  ? props.path
-                  : pathJoin(getCurrentPath(), props.name)
               bus.emit("share", {
-                path: targetPath,
+                path: pathJoin(getCurrentPath(), props.name),
                 name: props.name,
                 is_dir: props.is_dir,
               })
