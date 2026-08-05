@@ -1013,6 +1013,10 @@
   },
   "Quark": {
     "cookie": "Cookie",
+    "down_concurrency": "Down concurrency",
+    "down_concurrency-tips": "concurrency of ranged download, 0 to disable ranged download",
+    "down_part_size": "Down part size",
+    "down_part_size-tips": "part size (MB) of ranged download",
     "only_list_video_file": "Only list video file",
     "order_by": "Order by",
     "order_bys": {
@@ -1371,6 +1375,10 @@
   },
   "UC": {
     "cookie": "Cookie",
+    "down_concurrency": "Down concurrency",
+    "down_concurrency-tips": "concurrency of ranged download, 0 to disable ranged download",
+    "down_part_size": "Down part size",
+    "down_part_size-tips": "part size (MB) of ranged download",
     "only_list_video_file": "Only list video file",
     "order_by": "Order by",
     "order_bys": {
