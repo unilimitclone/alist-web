@@ -66,13 +66,29 @@
     "share_code-tips": "share code of 115 share link"
   },
   "123 Open": {
+    "access_token": "Access token",
+    "access_token-tips": "Required in token mode. Refreshed automatically when a refresh_token and client credentials are present.",
+    "auth_mode": "Auth mode",
+    "auth_mode-tips": "client_credentials: fill in your own clientID/clientSecret applied on the open platform. token: fill in the access_token (and refresh_token) obtained from an onboarded enterprise's app.",
+    "auth_modes": {
+      "client_credentials": "Client credentials",
+      "token": "Token"
+    },
     "client_id": "Client id",
     "client_secret": "Client secret",
     "private_key": "Private key",
+    "private_key-tips": "Direct link signing key. Leave empty to return unsigned links.",
+    "refresh_token": "Refresh token",
+    "refresh_token-tips": "Optional. Single-use and rotated on every refresh; the new value is saved back automatically.",
     "root_folder_id": "Root folder id",
     "uid": "Uid",
+    "uid-tips": "User ID used by direct link signing.",
+    "upload_thread": "Upload thread",
+    "upload_thread-tips": "Concurrent slice uploads.",
+    "use_direct_link": "Use direct link",
+    "use_direct_link-tips": "Resolve downloads through the direct link service instead of the download API. Requires developer benefits and an enabled direct link folder.",
     "valid_duration": "Valid duration",
-    "valid_duration-tips": "minutes"
+    "valid_duration-tips": "Validity of a signed direct link, in minutes."
   },
   "123Pan": {
     "password": "Password",
@@ -102,6 +118,8 @@
     "link_id": "Link id",
     "mail_cookies": "Mail cookies",
     "mail_cookies-tips": "Cookies from mail.10086.cn. Can be used alone for fast login, or with username and password for full login fallback.",
+    "parallel_upload": "Parallel upload",
+    "parallel_upload-tips": "personal_new only. Upload parts concurrently the way the official client does. Always buffers the file to the temp dir first, and needs a part size that is a multiple of 64 bytes.",
     "password": "Password",
     "password-tips": "Required only when using password login fallback with mail_cookies.",
     "report_real_size": "Report real size",
@@ -114,6 +132,8 @@
       "personal_new": "Personal new",
       "share": "Share"
     },
+    "upload_thread": "Upload thread",
+    "upload_thread-tips": "Number of concurrent part uploads, only used when parallel_upload is enabled.",
     "use_large_thumbnail": "Use large thumbnail",
     "user_domain_id": "User domain id",
     "user_domain_id-tips": "ud_id in Cookie, fill in to show disk usage",
@@ -404,6 +424,15 @@
     "user_platform-tips": "Optional device identifier; auto-generated if empty.",
     "username": "Username"
   },
+  "CSTCloudCapsule": {
+    "password": "Password",
+    "password-tips": "WebDAV password shown when the credential is created / 创建凭证时显示的 WebDAV 密码",
+    "root_folder_path": "Root folder path",
+    "user_agent": "User agent",
+    "user_agent-tips": "Must contain the app type chosen when creating the credential / 必须包含创建凭证时所选的应用类型(如 Zotero)",
+    "username": "Username",
+    "username-tips": "WebDAV username created in the data space's client access page. Note: the service currently only allows uploading .zip/.prop files over WebDAV / 在数据空间「客户端访问」中创建的 WebDAV 用户名。注意:服务端目前仅允许通过 WebDAV 上传 .zip/.prop 文件"
+  },
   "ChaoXingGroupDrive": {
     "bbsid": "Bbsid",
     "cookie": "Cookie",
@@ -544,7 +573,9 @@
       "standard_ia": "Standard ia"
     },
     "use_placeholder": "Use placeholder",
-    "use_placeholder-tips": "Create hidden placeholder file (for example .alist) to keep empty folders."
+    "use_placeholder-tips": "Create hidden placeholder file (for example .alist) to keep empty folders.",
+    "user_agent": "User agent",
+    "user_agent-tips": "Some providers validate the client by User-Agent, e.g. CSTCloud data capsule (s3.cstcloud.cn) requires it to contain the app type the AccessKey was created for (such as rclone). Such providers usually gate presigned URLs the same way, so also enable Web Proxy for the storage. Leave empty to use the SDK default."
   },
   "Doubao": {
     "cookie": "Cookie",
@@ -1086,7 +1117,9 @@
       "standard_ia": "Standard ia"
     },
     "use_placeholder": "Use placeholder",
-    "use_placeholder-tips": "Create hidden placeholder file (for example .alist) to keep empty folders."
+    "use_placeholder-tips": "Create hidden placeholder file (for example .alist) to keep empty folders.",
+    "user_agent": "User agent",
+    "user_agent-tips": "Some providers validate the client by User-Agent, e.g. CSTCloud data capsule (s3.cstcloud.cn) requires it to contain the app type the AccessKey was created for (such as rclone). Such providers usually gate presigned URLs the same way, so also enable Web Proxy for the storage. Leave empty to use the SDK default."
   },
   "SFTP": {
     "address": "Address",
@@ -1234,6 +1267,7 @@
     "credit_key-tips": "credit key,used for login",
     "device_id": "Device id",
     "password": "Password",
+    "refresh_token": "Refresh token",
     "root_folder_id": "Root folder id",
     "username": "Username"
   },
@@ -1547,6 +1581,7 @@
     "BaiduShare": {},
     "BaiduYouth": {},
     "BitQiu": {},
+    "CSTCloudCapsule": {},
     "ChaoXingGroupDrive": {},
     "Chunker": {},
     "Cloudreve": {},
@@ -1654,6 +1689,7 @@
     "BaiduShare": "BaiduShare",
     "BaiduYouth": "BaiduYouth",
     "BitQiu": "BitQiu",
+    "CSTCloudCapsule": "CSTCloudCapsule",
     "ChaoXingGroupDrive": "ChaoXingGroupDrive",
     "Chunker": "Chunker",
     "Cloudreve": "Cloudreve",
