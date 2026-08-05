@@ -27,6 +27,7 @@ const OtherSettings = () => {
   const [pikpakTempDir, setPikPakTempDir] = createSignal("")
   const [thunderTempDir, setThunderTempDir] = createSignal("")
   const [guangYaPanTempDir, setGuangYaPanTempDir] = createSignal("")
+  const [open123TempDir, setOpen123TempDir] = createSignal("")
   const [token, setToken] = createSignal("")
   const [settings, setSettings] = createSignal<SettingItem[]>([])
   const [settingsLoading, settingsData] = useFetch(
@@ -75,6 +76,12 @@ const OtherSettings = () => {
         temp_dir: guangYaPanTempDir(),
       }),
   )
+  const [setOpen123Loading, setOpen123] = useFetch(
+    (): PResp<string> =>
+      r.post("/admin/setting/set_123_open", {
+        temp_dir: open123TempDir(),
+      }),
+  )
   const [setTokenLoading, setTokenRequest] = useFetch(
     (): PResp<string> => r.post("/admin/setting/set_token", { token: token() }),
   )
@@ -103,6 +110,9 @@ const OtherSettings = () => {
       )
       setGuangYaPanTempDir(
         data.find((i) => i.key === "guangyapan_temp_dir")?.value || "",
+      )
+      setOpen123TempDir(
+        data.find((i) => i.key === "123_open_temp_dir")?.value || "",
       )
       setSettings(data)
     })
@@ -281,6 +291,29 @@ const OtherSettings = () => {
         }}
       >
         {t("settings_other.set_guangyapan")}
+      </Button>
+      <Heading my="$2">{t("settings_other.123_open")}</Heading>
+      <FormControl w="$full" display="flex" flexDirection="column">
+        <FormLabel for="123_open_temp_dir" display="flex" alignItems="center">
+          {t(`settings.123_open_temp_dir`)}
+        </FormLabel>
+        <FolderChooseInput
+          id="123_open_temp_dir"
+          value={open123TempDir()}
+          onChange={(path) => setOpen123TempDir(path)}
+        />
+      </FormControl>
+      <Button
+        my="$2"
+        loading={setOpen123Loading()}
+        onClick={async () => {
+          const resp = await setOpen123()
+          handleResp(resp, (data) => {
+            notify.success(data)
+          })
+        }}
+      >
+        {t("settings_other.set_123_open")}
       </Button>
       <Heading my="$2">{t("settings.token")}</Heading>
       <Input
