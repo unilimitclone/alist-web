@@ -25,7 +25,7 @@ import {
 } from "@hope-ui/solid"
 import { MaybeLoading, FolderChooseInput } from "~/components"
 import { useFetch, useRouter, useT } from "~/hooks"
-import { getRoleDetail, handleResp, notify, r } from "~/utils"
+import { handleResp, notify, r } from "~/utils"
 import { PEmptyResp, PResp, User } from "~/types"
 import { createStore } from "solid-js/store"
 import { For, Show, createSignal } from "solid-js"
@@ -38,13 +38,12 @@ const AddOrEdit = () => {
   const { params, back } = useRouter()
   const { id } = params
   const [roles, setRoles] = createSignal<{ id: number; name: string }[]>([])
-  const [paths, setPaths] = createSignal<string[]>([])
 
   const [user, setUser] = createStore<User>({
     id: 0,
     username: "",
     password: "",
-    base_path: "",
+    base_path: "/",
     role: [],
     permission: 0,
     disabled: false,
@@ -72,27 +71,10 @@ const AddOrEdit = () => {
       const resp = await loadUser()
       handleResp(resp, (data) => {
         setUser(data)
-        loadPathsFromRoles(data.role)
       })
     } else {
       setUser("base_path", "/")
     }
-  }
-
-  const loadPathsFromRoles = async (roleIds: number[]) => {
-    const pathSet = new Set<string>()
-    pathSet.add("/")
-    for (const roleId of roleIds) {
-      const resp = await getRoleDetail(roleId)
-      handleResp(resp, (data) => {
-        for (const scope of data.permission_scopes || []) {
-          if (scope.path) {
-            pathSet.add(scope.path)
-          }
-        }
-      })
-    }
-    setPaths([...pathSet].map((p) => p.toString()))
   }
 
   initData()
@@ -153,26 +135,7 @@ const AddOrEdit = () => {
               <FormLabel for="base_path" display="flex" alignItems="center">
                 {t(`users.base_path`)}
               </FormLabel>
-              <Select
-                value={user.base_path}
-                onChange={(value) => setUser("base_path", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectListbox>
-                    <For each={paths()}>
-                      {(p) => (
-                        <SelectOption value={p}>
-                          <SelectOptionText>{p}</SelectOptionText>
-                          <SelectOptionIndicator />
-                        </SelectOption>
-                      )}
-                    </For>
-                  </SelectListbox>
-                </SelectContent>
-              </Select>
+              <Input id="base_path" value="/" readOnly />
             </FormControl>
           </Show>
 

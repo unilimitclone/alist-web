@@ -2,7 +2,7 @@ import { Badge, Box, Center, HStack, Icon, Text, VStack } from "@hope-ui/solid"
 import { Motion } from "@motionone/solid"
 import { useContextMenu } from "solid-contextmenu"
 import { batch, Show, createMemo } from "solid-js"
-import { CenterLoading, LinkWithPush, ImageWithError } from "~/components"
+import { CenterLoading, LinkWithBase, ImageWithError } from "~/components"
 import { usePath, useRouter, useUtil, useT } from "~/hooks"
 import {
   checkboxOpen,
@@ -15,7 +15,7 @@ import { Obj, ObjType } from "~/types"
 import { bus, hoverColor, normalizeStorageClass } from "~/utils"
 import { getIconByObj } from "~/utils/icon"
 import { ItemCheckbox, useSelectWithMouse } from "./helper"
-import { pathJoin } from "~/utils/path"
+import { pathJoin, encodePath } from "~/utils/path"
 
 export const GridItem = (props: { obj: StoreObj & Obj; index: number }) => {
   const { isHide } = useUtil()
@@ -31,7 +31,7 @@ export const GridItem = (props: { obj: StoreObj & Obj; index: number }) => {
     />
   )
   const { show } = useContextMenu({ id: 1 })
-  const { pushHref, to, pathname } = useRouter()
+  const { to, pathname } = useRouter()
   const t = useT()
   const { openWithDoubleClick, toggleWithClick, restoreSelectionCache } =
     useSelectWithMouse()
@@ -43,10 +43,8 @@ export const GridItem = (props: { obj: StoreObj & Obj; index: number }) => {
     return key ? t(`home.storage_class.${key}`) : undefined
   })
 
-  // 构建完整路径
-  const getFullPath = () => {
-    return pathJoin(pathname(), props.obj.name)
-  }
+  const getFullPath = () =>
+    props.obj.virtual_path || pathJoin(pathname(), props.obj.name)
 
   return (
     <Motion.div
@@ -70,8 +68,8 @@ export const GridItem = (props: { obj: StoreObj & Obj; index: number }) => {
           transform: "scale(1.06)",
           bgColor: hoverColor(),
         }}
-        as={LinkWithPush}
-        href={props.obj.name}
+        as={LinkWithBase}
+        href={encodePath(getFullPath())}
         cursor={
           openWithDoubleClick() || toggleWithClick() ? "default" : "pointer"
         }
@@ -79,7 +77,7 @@ export const GridItem = (props: { obj: StoreObj & Obj; index: number }) => {
         on:dblclick={() => {
           if (!openWithDoubleClick()) return
           selectIndex(props.index, true, true)
-          to(getFullPath())
+          to(encodePath(getFullPath()))
         }}
         on:click={(e: MouseEvent) => {
           e.preventDefault()
@@ -88,10 +86,10 @@ export const GridItem = (props: { obj: StoreObj & Obj; index: number }) => {
           if (!restoreSelectionCache()) return
           if (toggleWithClick())
             return selectIndex(props.index, !props.obj.selected)
-          to(getFullPath())
+          to(encodePath(getFullPath()))
         }}
         onMouseEnter={() => {
-          setPathAs(props.obj.name, props.obj.is_dir, true)
+          setPathAs(getFullPath(), props.obj.is_dir)
         }}
         onContextMenu={(e: MouseEvent) => {
           batch(() => {

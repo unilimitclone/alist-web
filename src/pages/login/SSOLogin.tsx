@@ -15,13 +15,13 @@ const SSOLogin = () => {
   const token = searchParams["token"]
   if (token != undefined && token != "") {
     changeToken(token)
-    to(decodeURIComponent(searchParams.redirect || base_path || "/"), true)
+    to(searchParams.redirect || base_path || "/", true)
   }
   function messageEvent(event: MessageEvent) {
     const data = event.data
     if (data.token) {
       changeToken(data.token)
-      to(decodeURIComponent(searchParams.redirect || base_path || "/"), true)
+      to(searchParams.redirect || base_path || "/", true)
     }
   }
   window.addEventListener("message", messageEvent)

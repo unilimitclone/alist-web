@@ -18,6 +18,7 @@ export interface Obj {
   thumb: string
   type: ObjType
   path: string
+  virtual_path?: string
   tags?: string[]
   id?: string
   hashinfo?: string

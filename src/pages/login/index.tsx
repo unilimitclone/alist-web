@@ -225,10 +225,7 @@ const Login = () => {
             console.log("Full response data:", data)
             console.log("========================")
           }
-          to(
-            decodeURIComponent(searchParams.redirect || base_path || "/"),
-            true,
-          )
+          to(searchParams.redirect || base_path || "/", true)
         })
       } catch (error: unknown) {
         if (error instanceof Error && error.name != "AbortError")
@@ -298,10 +295,7 @@ const Login = () => {
               console.log("Full response data:", data)
               console.log("==================")
             }
-            to(
-              decodeURIComponent(searchParams.redirect || base_path || "/"),
-              true,
-            )
+            to(searchParams.redirect || base_path || "/", true)
           },
           (msg, code) => {
             if (!needOpt() && code === 402) {
@@ -477,12 +471,7 @@ const Login = () => {
                 colorScheme="accent"
                 onClick={() => {
                   changeToken()
-                  to(
-                    decodeURIComponent(
-                      searchParams.redirect || base_path || "/",
-                    ),
-                    true,
-                  )
+                  to(searchParams.redirect || base_path || "/", true)
                 }}
               >
                 {t("login.use_guest")}
@@ -710,12 +699,7 @@ const Login = () => {
                   as="a"
                   onClick={() => {
                     changeToken()
-                    to(
-                      decodeURIComponent(
-                        searchParams.redirect || base_path || "/",
-                      ),
-                      true,
-                    )
+                    to(searchParams.redirect || base_path || "/", true)
                   }}
                   color="#3573FF"
                   fontSize="14px"

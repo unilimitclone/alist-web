@@ -10,7 +10,7 @@ import {
   onCleanup,
   createMemo,
 } from "solid-js"
-import { LinkWithPush } from "~/components"
+import { LinkWithBase } from "~/components"
 import { usePath, useRouter, useUtil, useT } from "~/hooks"
 import {
   checkboxOpen,
@@ -32,7 +32,7 @@ import { getIconByObj } from "~/utils/icon"
 import { ItemCheckbox, useSelectWithMouse } from "./helper"
 import { me } from "~/store"
 import { getColorWithOpacity } from "~/utils/color"
-import { pathJoin } from "~/utils/path"
+import { pathJoin, encodePath } from "~/utils/path"
 
 interface Label {
   id: number
@@ -103,7 +103,7 @@ export const ListItem = (props: { obj: StoreObj & Obj; index: number }) => {
   }
   const { setPathAs } = usePath()
   const { show } = useContextMenu({ id: 1 })
-  const { pushHref, to, pathname } = useRouter()
+  const { to, pathname } = useRouter()
   const { openWithDoubleClick, toggleWithClick, restoreSelectionCache } =
     useSelectWithMouse()
   const t = useT()
@@ -146,21 +146,8 @@ export const ListItem = (props: { obj: StoreObj & Obj; index: number }) => {
     }
   }
 
-  // 构建完整路径
-  const getFullPath = () => {
-    // 如果obj.path存在且是完整路径（以权限路径开头），直接使用
-    const userPermissions = me().permissions || []
-
-    // if (
-    //   props.obj.path &&
-    //   userPermissions.some((perm) => props.obj.path?.startsWith(perm.path))
-    // ) {
-    //   return props.obj.path
-    // }
-    // 否则使用当前路径
-
-    return pathJoin(pathname(), props.obj.name)
-  }
+  const getFullPath = () =>
+    props.obj.virtual_path || pathJoin(pathname(), props.obj.name)
 
   return (
     <>
@@ -193,8 +180,8 @@ export const ListItem = (props: { obj: StoreObj & Obj; index: number }) => {
               class="name-box"
               spacing="$1"
               w={cols[0].w}
-              as={LinkWithPush}
-              href={props.obj.name}
+              as={LinkWithBase}
+              href={encodePath(getFullPath())}
               cursor={
                 openWithDoubleClick() || toggleWithClick()
                   ? "default"
@@ -203,7 +190,7 @@ export const ListItem = (props: { obj: StoreObj & Obj; index: number }) => {
               on:dblclick={() => {
                 if (!openWithDoubleClick()) return
                 selectIndex(props.index, true, true)
-                to(getFullPath())
+                to(encodePath(getFullPath()))
               }}
               on:click={(e: MouseEvent) => {
                 e.preventDefault()
@@ -212,10 +199,10 @@ export const ListItem = (props: { obj: StoreObj & Obj; index: number }) => {
                 if (!restoreSelectionCache()) return
                 if (toggleWithClick())
                   return selectIndex(props.index, !props.obj.selected)
-                to(getFullPath())
+                to(encodePath(getFullPath()))
               }}
               onMouseEnter={() => {
-                setPathAs(props.obj.name, props.obj.is_dir, true)
+                setPathAs(getFullPath(), props.obj.is_dir)
               }}
               onContextMenu={(e: MouseEvent) => {
                 batch(() => {
