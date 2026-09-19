@@ -67,9 +67,9 @@
   },
   "123 Open": {
     "access_token": "Access token",
-    "access_token-tips": "Required in token mode. Refreshed automatically when a refresh_token and client credentials are present.",
+    "access_token-tips": "Get it at https://alistgo.com/zh/tool/123pan/request.html",
     "auth_mode": "Auth mode",
-    "auth_mode-tips": "client_credentials: fill in your own clientID/clientSecret applied on the open platform. token: fill in the access_token (and refresh_token) obtained from an onboarded enterprise's app.",
+    "auth_mode-tips": "token: use the access_token/refresh_token, no developer application needed. client_credentials: use the clientID/clientSecret of your own application on the open platform.",
     "auth_modes": {
       "client_credentials": "Client credentials",
       "token": "Token"
@@ -79,7 +79,7 @@
     "private_key": "Private key",
     "private_key-tips": "Direct link signing key. Leave empty to return unsigned links.",
     "refresh_token": "Refresh token",
-    "refresh_token-tips": "Optional. Single-use and rotated on every refresh; the new value is saved back automatically.",
+    "refresh_token-tips": "Obtained together with the access_token. Single-use and rotated on every refresh; the new value is saved back automatically.",
     "root_folder_id": "Root folder id",
     "uid": "Uid",
     "uid-tips": "User ID used by direct link signing.",
