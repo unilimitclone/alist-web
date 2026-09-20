@@ -113,48 +113,6 @@ export const usePath = () => {
     })
   }
 
-  // 统一的路径处理函数
-  const getProcessedPath = (path: string): string => {
-    if (path === "/") return "/"
-    // 如果路径已经包含了权限路径，直接返回
-
-    const userPermissions = me().permissions || []
-    for (const perm of userPermissions) {
-      if (path.startsWith(perm.path)) {
-        return path
-      }
-    }
-
-    // 查找最匹配的权限路径
-    let bestMatch = userPermissions[0]
-    let maxMatchLength = 0
-
-    for (const perm of userPermissions) {
-      const cleanPath = path.replace(/^\/|\/$/g, "")
-      const cleanPermPath = perm.path.replace(/^\/|\/$/g, "")
-
-      if (
-        cleanPath.includes(cleanPermPath) &&
-        cleanPermPath.length > maxMatchLength
-      ) {
-        bestMatch = perm
-        maxMatchLength = cleanPermPath.length
-      }
-    }
-
-    // 如果找到匹配的权限路径，返回完整路径
-    if (bestMatch && maxMatchLength > 0) {
-      return pathJoin(bestMatch.path, path)
-    }
-
-    // 如果没有找到匹配，使用第一个权限路径
-    if (userPermissions.length > 0) {
-      return pathJoin(userPermissions[0].path, path)
-    }
-
-    return path
-  }
-
   const [, getObj] = useFetch((path: string) =>
     fsGet(
       path,
@@ -179,7 +137,7 @@ export const usePath = () => {
         index: arg?.index,
         size: arg?.size,
       }
-      const processedPath = getProcessedPath(arg?.path || "/")
+      const processedPath = arg?.path || "/"
 
       return fsList(
         processedPath,
@@ -246,6 +204,7 @@ export const usePath = () => {
           thumb: "",
           type: 1, // FOLDER
           path: perm.path,
+          virtual_path: perm.path,
           selected: false,
         }))
 
@@ -416,6 +375,7 @@ export const usePath = () => {
           thumb: "",
           type: 1, // FOLDER
           path: perm.path,
+          virtual_path: perm.path,
           selected: false,
         }))
 
@@ -452,6 +412,7 @@ export const usePath = () => {
           thumb: "",
           type: 1, // FOLDER
           path: perm.path,
+          virtual_path: perm.path,
           selected: false,
         }))
 
@@ -459,29 +420,6 @@ export const usePath = () => {
         ObjStore.setTotal(permDirs.length)
         ObjStore.setState(State.Folder)
         return
-      }
-    } else {
-      // 检查当前路径是否是某个权限路径的子路径
-      const matchedPerm = userPermissions.find((perm) => {
-        // 移除开头的斜杠以便比较
-        const cleanCurrentPath = currentPath.replace(/^\//, "")
-        const cleanPermPath = perm.path.replace(/^\//, "")
-        return (
-          cleanCurrentPath.includes(cleanPermPath) ||
-          cleanPermPath.includes(cleanCurrentPath)
-        )
-      })
-
-      // 如果找到匹配的权限路径，重定向到正确的完整路径
-      if (matchedPerm) {
-        const pathParts = currentPath.split("/").filter(Boolean)
-        const permParts = matchedPerm.path.split("/").filter(Boolean)
-
-        // 如果当前路径是权限路径的一部分，重定向到完整的权限路径
-        if (pathParts.some((part) => permParts.includes(part))) {
-          to(matchedPerm.path)
-          return
-        }
       }
     }
     ObjStore.setErr(msg)
