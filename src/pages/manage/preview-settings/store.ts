@@ -7,7 +7,7 @@ import {
   type PreviewSettingsMap,
 } from "~/store"
 import type { PreviewOverride } from "~/store/settings"
-import { ObjType } from "~/types"
+import { Group, ObjType, type SettingItem } from "~/types"
 import {
   handleRespWithoutAuth,
   handleRespWithoutAuthAndNotify,
@@ -68,13 +68,33 @@ const typeSettingKey = (type?: ObjType): string | null => {
   }
 }
 
+// video_types/audio_types/image_types/text_types are PRIVATE settings and
+// absent from /public/settings, so the admin page loads them itself.
+const [typeSettings, setTypeSettings] = createSignal<Record<string, string>>({})
+
+export const loadTypeSettings = async (): Promise<void> => {
+  const resp = (await r.get(`/admin/setting/list?group=${Group.PREVIEW}`)) as {
+    code: number
+    data: SettingItem[]
+    message: string
+  }
+  handleRespWithoutAuthAndNotify(resp, (data) => {
+    const next: Record<string, string> = {}
+    data
+      .filter((i) => i.key.endsWith("_types"))
+      .forEach((i) => (next[i.key] = i.value))
+    setTypeSettings(next)
+    bumpPreviewSettingsVersion((v) => v + 1)
+  })
+}
+
 const typeMatchesExtension = (
   type: ObjType | undefined,
   ext: string,
 ): boolean => {
   const key = typeSettingKey(type)
   if (!key) return false
-  return getSetting(key)
+  return (typeSettings()[key] ?? getSetting(key))
     .split(",")
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean)
@@ -199,20 +219,8 @@ const normaliseOverride = (o: PreviewOverride): PreviewOverride | undefined => {
   return Object.keys(clean).length ? clean : undefined
 }
 
-export const updateOverride = async (
-  ext: string,
-  mutate: (current: PreviewOverride) => PreviewOverride,
-): Promise<void> => {
-  const lower = ext.toLowerCase()
-  const current: PreviewSettingsMap = { ...getPreviewSettings() }
-  const next = mutate({ ...(current[lower] ?? {}) })
-  const normalised = normaliseOverride(next)
-  if (normalised) {
-    current[lower] = normalised
-  } else {
-    delete current[lower]
-  }
-  const value = JSON.stringify(current)
+const writePreviewSettings = async (map: PreviewSettingsMap): Promise<void> => {
+  const value = JSON.stringify(map)
   await new Promise<void>((resolve, reject) => {
     r.post("/admin/setting/save", [
       { key: "preview_settings", value, type: "text", group: 3 },
@@ -228,6 +236,30 @@ export const updateOverride = async (
   })
 }
 
+const applyOverride = (
+  map: PreviewSettingsMap,
+  ext: string,
+  mutate: (current: PreviewOverride) => PreviewOverride,
+): void => {
+  const lower = ext.toLowerCase()
+  const next = mutate({ ...(map[lower] ?? {}) })
+  const normalised = normaliseOverride(next)
+  if (normalised) {
+    map[lower] = normalised
+  } else {
+    delete map[lower]
+  }
+}
+
+export const updateOverride = async (
+  ext: string,
+  mutate: (current: PreviewOverride) => PreviewOverride,
+): Promise<void> => {
+  const current: PreviewSettingsMap = { ...getPreviewSettings() }
+  applyOverride(current, ext, mutate)
+  await writePreviewSettings(current)
+}
+
 export const toggleRow = (ext: string, id: string, nextEnabled: boolean) =>
   updateOverride(ext, (cur) => {
     const disabled = new Set(cur.disabled ?? [])
@@ -238,6 +270,34 @@ export const toggleRow = (ext: string, id: string, nextEnabled: boolean) =>
 
 const computeDefaultOrder = (ext: string): string[] =>
   buildRowsForExtension(ext, undefined).map((r) => r.id)
+
+const setDisabledAll = (
+  ext: string,
+  enabled: boolean,
+): ((cur: PreviewOverride) => PreviewOverride) => {
+  return (cur) => ({
+    ...cur,
+    disabled: enabled ? [] : computeDefaultOrder(ext),
+  })
+}
+
+export const setAllForExtension = (ext: string, enabled: boolean) =>
+  updateOverride(ext, setDisabledAll(ext, enabled))
+
+export const setAllForExtensions = async (
+  exts: string[],
+  enabled: boolean,
+): Promise<void> => {
+  const current: PreviewSettingsMap = { ...getPreviewSettings() }
+  const targets = new Set<string>([
+    ...exts.map((e) => e.toLowerCase()),
+    ...Object.keys(current),
+  ])
+  targets.forEach((ext) => {
+    applyOverride(current, ext, setDisabledAll(ext, enabled))
+  })
+  await writePreviewSettings(current)
+}
 
 export const reorderRow = (
   ext: string,

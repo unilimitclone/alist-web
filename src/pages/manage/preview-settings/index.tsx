@@ -25,8 +25,11 @@ import {
   buildRowsForExtension,
   copyExtensionConfigTo,
   deleteIframeEntry,
+  loadTypeSettings,
   previewSettingsVersion,
   reorderRow,
+  setAllForExtension,
+  setAllForExtensions,
   toggleRow,
   upsertIframeEntry,
 } from "./store"
@@ -45,6 +48,7 @@ const PreviewSettings = () => {
   const [editing, setEditing] = createSignal<EditDraft | null>(null)
   const [copying, setCopying] = createSignal(false)
   const [copyTargets, setCopyTargets] = createSignal<Set<string>>(new Set())
+  const [bulk, setBulk] = createSignal<"enable" | "disable" | null>(null)
   const extList = useExtensionList(userExts)
   const toggleTarget = (e: string) => {
     const next = new Set(copyTargets())
@@ -60,6 +64,7 @@ const PreviewSettings = () => {
 
   const reportError = (e: unknown) =>
     notify.error(e instanceof Error ? e.message : String(e))
+  loadTypeSettings().catch(reportError)
 
   const openAdd = () => setEditing({ name: "", url: "" })
   const openEdit = (name: string, url?: string) =>
@@ -102,6 +107,17 @@ const PreviewSettings = () => {
         >
           {t("preview_settings.copy_to_extensions")}
         </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          colorScheme="danger"
+          onClick={() => setBulk("disable")}
+        >
+          {t("preview_settings.disable_all")}
+        </Button>
+        <Button size="sm" variant="outline" onClick={() => setBulk("enable")}>
+          {t("preview_settings.enable_all")}
+        </Button>
       </HStack>
       <VStack w="$full" alignItems="stretch" spacing="$2">
         <For each={rows()}>
@@ -123,11 +139,63 @@ const PreviewSettings = () => {
           )}
         </For>
       </VStack>
-      <HStack>
+      <HStack spacing="$2">
         <Button size="sm" onClick={openAdd}>
           {t("preview_settings.add_iframe")}
         </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => setAllForExtension(ext(), false).catch(reportError)}
+        >
+          {t("preview_settings.disable_current")}
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => setAllForExtension(ext(), true).catch(reportError)}
+        >
+          {t("preview_settings.enable_current")}
+        </Button>
       </HStack>
+
+      <Modal opened={!!bulk()} onClose={() => setBulk(null)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalHeader>
+            {t(
+              bulk() === "disable"
+                ? "preview_settings.disable_all"
+                : "preview_settings.enable_all",
+            )}
+          </ModalHeader>
+          <ModalBody>
+            {t(
+              bulk() === "disable"
+                ? "preview_settings.disable_all_confirm"
+                : "preview_settings.enable_all_confirm",
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme={bulk() === "disable" ? "danger" : "primary"}
+              onClick={async () => {
+                const mode = bulk()
+                if (!mode) return
+                try {
+                  await setAllForExtensions(extList(), mode === "enable")
+                  setBulk(null)
+                } catch (e) {
+                  reportError(e)
+                }
+              }}
+            >
+              {t("global.ok")}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       <Modal opened={!!editing()} onClose={() => setEditing(null)}>
         <ModalOverlay />

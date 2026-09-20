@@ -14,8 +14,9 @@ import {
   SelectValue,
 } from "@hope-ui/solid"
 import { createMemo, createSignal, For, Show } from "solid-js"
-import { getSetting } from "~/store"
+import { getPreviewSettings, getSetting } from "~/store"
 import { useT } from "~/hooks"
+import { previewSettingsVersion } from "./store"
 
 const COMMON_EXTS = [
   "pdf",
@@ -83,6 +84,8 @@ export const useExtensionList = (extraKeys: () => string[]) =>
     collectKeysFromRecord(getSetting("external_previews")).forEach((k) =>
       set.add(k),
     )
+    previewSettingsVersion()
+    Object.keys(getPreviewSettings()).forEach((k) => set.add(k))
     extraKeys().forEach((k) => set.add(k.toLowerCase()))
     return Array.from(set).sort()
   })

@@ -268,6 +268,19 @@ export const getPreviews = (file: PreviewFile): PreviewComponent[] => {
     })
   })
 
+  // Download sits after prior built-ins and iframe previews but before
+  // non-prior built-ins (e.g. Archive when preview_archives_by_default is
+  // off), so those never become the default unless explicitly ordered.
+  if (!isShareRoute || file.download_url) {
+    candidates.push({
+      id: "download",
+      name: "Download",
+      i18nKey: "home.preview.download",
+      component: lazy(() => import("./download")),
+      defaultRank: 5000,
+    })
+  }
+
   candidates.sort((a, b) => {
     const ai = orderIndex.has(a.id)
       ? orderIndex.get(a.id)!
@@ -279,18 +292,7 @@ export const getPreviews = (file: PreviewFile): PreviewComponent[] => {
     return a.defaultRank - b.defaultRank
   })
 
-  const res: PreviewComponent[] = candidates.map(
-    ({ id, defaultRank, ...rest }) => rest,
-  )
-
-  if (!isShareRoute || file.download_url) {
-    res.push({
-      name: "Download",
-      i18nKey: "home.preview.download",
-      component: lazy(() => import("./download")),
-    })
-  }
-  return res
+  return candidates.map(({ id, defaultRank, ...rest }) => rest)
 }
 
 export const getBuiltinPreviewRegistry = (): readonly Readonly<Preview>[] =>

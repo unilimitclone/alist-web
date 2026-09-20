@@ -2,6 +2,12 @@
   "add_extension": "Add extension",
   "add_iframe": "Add iframe previewer",
   "copy_to_extensions": "Copy settings to...",
+  "disable_all": "Disable all",
+  "enable_all": "Enable all",
+  "disable_all_confirm": "Disable every preview for all extensions?",
+  "enable_all_confirm": "Enable every preview for all extensions?",
+  "disable_current": "Disable all for this extension",
+  "enable_current": "Enable all for this extension",
   "source": {
     "builtin": "built-in",
     "iframe": "iframe",
