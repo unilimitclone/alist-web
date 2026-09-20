@@ -13,7 +13,10 @@
     "ftp_read": "FTP read",
     "ftp_manage": "FTP manage",
     "read_archives": "Read archives",
-    "decompress": "Decompress"
+    "decompress": "Decompress",
+    "path_limit": "Check path limits",
+    "mcp_read": "MCP read",
+    "mcp_manage": "MCP manage"
   },
   "roles": {
     "general": "General",
