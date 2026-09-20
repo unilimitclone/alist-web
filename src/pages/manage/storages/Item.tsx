@@ -1,4 +1,5 @@
 import {
+  Anchor,
   Button,
   Center,
   FormControl,
@@ -52,6 +53,33 @@ export type ItemProps = DriverItem & {
         value: string
       }
   )
+
+// trailing punctuation stays outside the link
+const urlPattern = /(https?:\/\/[^\s<>"')]*[^\s<>"'),.;:])/g
+
+// Renders help text with bare URLs turned into links.
+const HelpText = (props: { text: string }) => {
+  const parts = () => props.text.split(urlPattern)
+  return (
+    <For each={parts()}>
+      {(part) =>
+        /^https?:\/\//.test(part) ? (
+          <Anchor
+            href={part}
+            external
+            p="0"
+            color="$info9"
+            wordBreak="break-all"
+          >
+            {part}
+          </Anchor>
+        ) : (
+          part
+        )
+      }
+    </For>
+  )
+}
 
 const Item = (props: ItemProps) => {
   const t = useT()
@@ -320,11 +348,13 @@ const Item = (props: ItemProps) => {
       </Switch>
       <Show when={props.help}>
         <FormHelperText>
-          {t(
-            props.driver === "common"
-              ? `storages.common.${props.name}-tips`
-              : `drivers.${props.driver}.${props.name}-tips`,
-          )}
+          <HelpText
+            text={t(
+              props.driver === "common"
+                ? `storages.common.${props.name}-tips`
+                : `drivers.${props.driver}.${props.name}-tips`,
+            )}
+          />
         </FormHelperText>
       </Show>
       <Show when={isChunkSizeField}>

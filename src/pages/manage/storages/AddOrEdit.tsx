@@ -43,6 +43,30 @@ function GetDefaultValue(type: Type, value?: string) {
 
 type Drivers = Record<string, DriverInfo>
 
+// show_when: "field=a|b" — the item is shown only when the referenced field
+// currently equals one of the listed values. Unset fields fall back to the
+// referenced item's default.
+export function isItemVisible(
+  item: DriverItem,
+  values: Record<string, any>,
+  items: DriverItem[],
+): boolean {
+  const cond = item.show_when?.trim()
+  if (!cond) return true
+  const eq = cond.indexOf("=")
+  if (eq < 0) return true
+  const field = cond.slice(0, eq).trim()
+  const allowed = cond
+    .slice(eq + 1)
+    .split("|")
+    .map((v) => v.trim())
+  let current = values[field]
+  if (current === undefined || current === null || current === "") {
+    current = items.find((i) => i.name === field)?.default ?? ""
+  }
+  return allowed.includes(String(current))
+}
+
 const AddOrEdit = () => {
   const t = useT()
   const { params, back, to } = useRouter()
@@ -176,15 +200,23 @@ const AddOrEdit = () => {
           </For>
           <For each={drivers()[storage.driver].additional}>
             {(item) => (
-              <Item
-                {...item}
-                driver={storage.driver}
-                additionValues={addition}
-                value={addition[item.name] as any}
-                onChange={(val: any) => {
-                  setAddition(item.name, val)
-                }}
-              />
+              <Show
+                when={isItemVisible(
+                  item,
+                  addition,
+                  drivers()[storage.driver].additional,
+                )}
+              >
+                <Item
+                  {...item}
+                  driver={storage.driver}
+                  additionValues={addition}
+                  value={addition[item.name] as any}
+                  onChange={(val: any) => {
+                    setAddition(item.name, val)
+                  }}
+                />
+              </Show>
             )}
           </For>
         </Show>

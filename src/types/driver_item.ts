@@ -7,6 +7,8 @@ export interface DriverItem {
   options: string
   required?: boolean
   help?: string
+  // e.g. "auth_mode=token" or "auth_mode=token|client_credentials"
+  show_when?: string
 }
 
 export interface DriverConfig {
