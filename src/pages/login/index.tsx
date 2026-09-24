@@ -26,6 +26,7 @@ import {
   handleRespWithoutNotify,
   base_path,
   handleResp,
+  handleRespWithoutAuth,
   hashPwd,
   joinBase,
 } from "~/utils"
@@ -45,6 +46,16 @@ import {
 } from "@github/webauthn-json/browser-ponyfill"
 
 const Login = () => {
+  const browseAsGuest = async () => {
+    // Check explicit guest access before clearing any existing session.
+    const resp: Resp<unknown> = await r.get("/me", {
+      headers: { Authorization: "" },
+    })
+    handleRespWithoutAuth(resp, () => {
+      changeToken()
+      to(searchParams.redirect || base_path || "/", true)
+    })
+  }
   const t = useT()
   const usertitle = createMemo(() => {
     return `${t("login.login_to")} ${getSetting("site_title")}`
@@ -466,14 +477,7 @@ const Login = () => {
                   {ldapLoginTips}
                 </Checkbox>
               </Show>
-              <Button
-                w="$full"
-                colorScheme="accent"
-                onClick={() => {
-                  changeToken()
-                  to(searchParams.redirect || base_path || "/", true)
-                }}
-              >
+              <Button w="$full" colorScheme="accent" onClick={browseAsGuest}>
                 {t("login.use_guest")}
               </Button>
               {/* 注册切换 */}
@@ -697,10 +701,7 @@ const Login = () => {
                 </Show>
                 <Text
                   as="a"
-                  onClick={() => {
-                    changeToken()
-                    to(searchParams.redirect || base_path || "/", true)
-                  }}
+                  onClick={browseAsGuest}
                   color="#3573FF"
                   fontSize="14px"
                   cursor="pointer"

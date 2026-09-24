@@ -1,6 +1,6 @@
 import { createSignal, JSXElement, Match, onMount, Switch } from "solid-js"
 import { Error, FullScreenLoading } from "~/components"
-import { useFetch, useT } from "~/hooks"
+import { useFetch, useRouter, useT } from "~/hooks"
 import { Me, me, setMe } from "~/store"
 import { clearAllHistory } from "~/store/history"
 import { PResp } from "~/types"
@@ -18,13 +18,18 @@ const getUserCacheKey = (user: Partial<Me>) =>
 
 const MustUser = (props: { children: JSXElement }) => {
   const t = useT()
+  const { pathname } = useRouter()
   const [loading, data] = useFetch((): PResp<Me> => r.get("/me"), true)
   const [err, setErr] = createSignal<string>()
 
   onMount(() => {
     void (async () => {
+      const resp = await data()
+      // Opening the site without a valid session is a normal login flow.
+      // Resource requests and explicit guest access still report errors.
+      const notifyError = resp.code !== 401 || pathname() !== "/"
       handleResp(
-        await data(),
+        resp,
         (user) => {
           if (getUserCacheKey(user) !== getUserCacheKey(me())) {
             clearAllHistory()
@@ -32,6 +37,8 @@ const MustUser = (props: { children: JSXElement }) => {
           setMe(user)
         },
         setErr,
+        true,
+        notifyError,
       )
     })()
   })
