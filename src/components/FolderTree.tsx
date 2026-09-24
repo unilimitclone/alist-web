@@ -73,7 +73,11 @@ const context = createContext<FolderTreeContext>()
 const isPathInPermissions = (path: string, permPaths: PermPath[]) => {
   return permPaths.some((perm) => {
     // 如果是权限路径本身或其子路径
-    return path === perm.path || path.startsWith(perm.path + "/")
+    return (
+      perm.path === "/" ||
+      path === perm.path ||
+      path.startsWith(perm.path + "/")
+    )
   })
 }
 
@@ -143,7 +147,7 @@ const FolderTreeNode = (props: { path: string; isRoot?: boolean }) => {
       (data) => {
         isLoaded = true
         // 只保留文件夹类型的项目
-        let filteredDirs = data.content.filter((item) => item.is_dir)
+        let filteredDirs = (data.content ?? []).filter((item) => item.is_dir)
 
         // 如果不是管理员，才进行权限过滤
         const userRole = me().role || []
